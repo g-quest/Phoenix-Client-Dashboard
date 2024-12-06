@@ -1,17 +1,20 @@
-fastapi>=0.109.0
-pydantic>=2.3
+
+# Core Dependencies
+fastapi>=0.109,<0.120
+pydantic>=2.3,<2.4
 pydantic-settings
 uvicorn[standard]
-motor
-PyMongo
+chromadb
+
+# AI and Text Handling
+openai
+sentence-transformers
+
+# Environment
+python-dotenv
+
+# Web Scraping and Parsing
 beautifulsoup4
 lxml
-openai
-sqlmodel
-psycopg2-binary
-klaviyo_api
-python-slugify
-python-dotenv
-pytest
 requests
 requests-html

@@ -14,17 +14,11 @@ export default function Home() {
       }}
     >
       <Box>
-        <Image
-          src="/images/seedlit-icon.png"
-          alt="SeedLit"
-          width={200}
-          height={200}
-        />
         <Typography variant="h1" sx={{ color: 'var(--sl-leafy-green)' }}>
-          SeedLit
+          Phoenix
         </Typography>
         <Typography variant="subtitle1">
-          Planting Seeds for Lifelong Learning through Storytelling
+          Aggregated Marketing Platform
         </Typography>
       </Box>
     </Box>

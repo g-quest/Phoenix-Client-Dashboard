@@ -36,7 +36,7 @@ const nunitoSansBoldItalic = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'SeedLit',
+  title: 'phoenix',
   description: 'Planting Seeds for Lifelong Learning through Storytelling',
 }
 

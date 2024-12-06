@@ -1,15 +1,14 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    app_name: str = "SeedLit API"
-    DOCS_URL: str = ""
-    DATABASE_URL: str = ""
+    app_name: str = "Phoenix API"  # Application name
+    docs_url: str = "/docs"  # Swagger documentation URL
+    openai_api_key: str = ""  # OpenAI API key
 
-    OPENAI_API_KEY: str = ""
-    EXA_API_KEY: str = ""
-
-    model_config = SettingsConfigDict(env_file=".env")
+    class Config:
+        env_file = ".env"  # Load environment variables from .env file
 
 
+# Instantiate the settings
 settings = Settings()

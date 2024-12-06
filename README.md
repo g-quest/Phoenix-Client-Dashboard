@@ -1,4 +1,4 @@
-# SeedLit
+# Phoenix
 
 #### Add the following to your hosts file:
 
@@ -13,10 +13,10 @@ sudo vim /etc/hosts
 docker compose up
 ```
 
-#### To start just the Postgres and API containers:
+#### To start just the API and Chroma containers:
 
 ```bash
-docker compose up postgres api
+docker compose up api chroma
 ```
 
 #### Additionally, if you want to run the client separately:
@@ -30,11 +30,14 @@ npm run dev
 #### Services should be accessable here
 
 Client: http://localhost:3000
-API: http://localhost:3001
-API Docs: http://localhost:3001/docs
+API: http://localhost:8000
+API Docs: http://localhost:8000/docs
 
 #### To remove all containers, images, volumes, and client build when necessary:
 
 ```bash
-docker container rm -f $(docker container ls -qa --filter "label=project=seedlit"); docker image rm -f $(docker image ls -q --filter "label=project=seedlit"); docker volume rm $(docker volume ls -q --filter "label=project=seedlit"); rm -rf ./services/client/.next
+docker container rm -f $(docker container ls -qa --filter "label=project=phoenix") \
+&& docker image rm -f $(docker image ls -q --filter "label=project=phoenix") \
+&& (docker volume ls -q --filter "label=project=phoenix" | xargs -r docker volume rm) \
+&& rm -rf ./services/client/.next
 ```
