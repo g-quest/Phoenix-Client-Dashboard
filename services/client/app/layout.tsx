@@ -1,43 +1,10 @@
-import '@/styles/globals.css'
-import theme from '@/styles/theme'
 import { Metadata } from 'next'
-import CssBaseline from '@mui/material/CssBaseline'
-import { ThemeProvider } from '@mui/material/styles'
-import localFont from 'next/font/local'
-
-const lilitaOne = localFont({
-  src: '../public/fonts/LilitaOne-Regular.ttf',
-  display: 'swap',
-  variable: '--font-lilita-one',
-})
-
-const nunitoSansRegular = localFont({
-  src: '../public/fonts/NunitoSans-Regular.ttf',
-  display: 'swap',
-  variable: '--font-nunito-sans',
-})
-
-const nunitoSansItalic = localFont({
-  src: '../public/fonts/NunitoSans-Italic.ttf',
-  display: 'swap',
-  variable: '--font-nunito-sans-italic',
-})
-
-const nunitoSansBold = localFont({
-  src: '../public/fonts/NunitoSans-Bold.ttf',
-  display: 'swap',
-  variable: '--font-nunito-sans-bold',
-})
-
-const nunitoSansBoldItalic = localFont({
-  src: '../public/fonts/NunitoSans-BoldItalic.ttf',
-  display: 'swap',
-  variable: '--font-nunito-sans-bold-italic',
-})
+import '@/styles/globals.css'
 
 export const metadata: Metadata = {
-  title: 'phoenix',
-  description: 'Planting Seeds for Lifelong Learning through Storytelling',
+  title: 'Phoenix Client Insights Dashboard',
+  description:
+    'The Client Insights Dashboard is a comprehensive tool designed to empower clients by gathering and analyzing actionable insights from their social platforms, such as Twitter and Discord',
 }
 
 export default function RootLayout({
@@ -46,19 +13,27 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <html
-        lang="en"
-        className={`${lilitaOne.variable} ${nunitoSansRegular.variable} ${nunitoSansItalic.variable} ${nunitoSansBold.variable} ${nunitoSansBoldItalic.variable}`}
-      >
-        <head>
-          <link rel="icon" href="/favicon.ico" sizes="any" />
-        </head>
-        <body>
-          <main>{children}</main>
-        </body>
-      </html>
-    </ThemeProvider>
+    <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="bg-background">
+        <main>{children}</main>
+      </body>
+    </html>
   )
 }
