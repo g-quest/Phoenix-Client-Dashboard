@@ -1,3 +1,6 @@
+'use client'
+import { SidebarTrigger } from '../components/core-ui/sidebar'
+
 export default function Home() {
-  return <div>Test</div>
+  return <div>{/* <SidebarTrigger /> */}</div>
 }
