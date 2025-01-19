@@ -1,19 +1,23 @@
 services:
-  chroma:
-    container_name: phoenix-chroma
+  postgres:
+    container_name: phoenix-postgres
     build:
-      context: ./services/chroma/
+      context: ./services/postgres/
     ports:
-      - 8001:8001
+      - 5432:5432
+    healthcheck:
+      test: "pg_isready -h localhost -U postgres -d phoenix"
+      interval: 3s
+      timeout: 3s
+      retries: 30
     volumes:
-      - ./services/chroma/data:/data
+      - ./services/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - db-data:/var/lib/postgresql/data
     labels:
       - "project=phoenix"
 
   api:
     container_name: phoenix-api
-    depends_on:
-      - chroma
     build:
       context: ./services/api/
     ports:
@@ -24,11 +28,6 @@ services:
       - services/api/.env
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://chroma:8001"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     labels:
       - "project=phoenix"
 
@@ -47,6 +46,6 @@ services:
       - "project=phoenix"
 
 volumes:
-  chroma_data:
+  db-data:
     labels:
       - "project=phoenix"

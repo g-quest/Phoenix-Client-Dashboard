@@ -1,39 +1,53 @@
-# Phoenix
+# Phoenix Client Insights Dashboard
 
-#### Add the following to your hosts file:
+## Setup
+
+### Add to Hosts File
+
+Add the following entry to your `/etc/hosts` file:
 
 ```bash
 sudo vim /etc/hosts
   127.0.0.1 api
 ```
 
-#### Run all services:
+## Running Services
+
+### Run All Services
+
+To start all services, run:
 
 ```bash
 docker compose up
 ```
 
-#### To start just the API and Chroma containers:
+### Run API and Postgres Only
+
+To start only the API and Postgres containers, run:
 
 ```bash
-docker compose up api chroma
+docker compose up api postgres
 ```
 
-#### Additionally, if you want to run the client separately:
+### Run Client Separately
+
+To run the client separately:
 
 ```bash
 cd services/client
-npm install
+npm install # If not done already
 npm run dev
 ```
 
-#### Services should be accessable here
+## Accessing Services
 
-Client: http://localhost:3000
-API: http://localhost:8000
-API Docs: http://localhost:8000/docs
+- Client: http://localhost:3000
+- API: http://localhost:8000
+- API Docs: http://localhost:8000/docs
 
-#### To remove all containers, images, volumes, and client build when necessary:
+## Cleanup
+
+To remove all containers, images, volumes, and client build:
 
 ```bash
 docker container rm -f $(docker container ls -qa --filter "label=project=phoenix") \
