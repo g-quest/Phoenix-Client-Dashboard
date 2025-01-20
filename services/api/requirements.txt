@@ -5,6 +5,11 @@ pydantic>=2.3,<2.4
 pydantic-settings
 uvicorn[standard]
 
+# Database and ORM
+sqlmodel
+sqlalchemy
+psycopg2-binary
+
 # AI and Text Handling
 openai
 sentence-transformers

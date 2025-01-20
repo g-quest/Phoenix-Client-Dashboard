@@ -30,6 +30,9 @@ services:
       - "host.docker.internal:host-gateway"
     labels:
       - "project=phoenix"
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   client:
     container_name: phoenix-client

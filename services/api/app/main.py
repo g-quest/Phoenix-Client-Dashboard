@@ -1,13 +1,23 @@
 from fastapi import FastAPI, APIRouter
-from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 from app.core.config import settings
+from sqlmodel import Session
+from app.core.db import engine, init_db
+
+# Import routers
+from app.routes import (
+    client
+) 
+
+# Initialize database
+with Session(engine) as session:
+    init_db(session)
 
 # Initialize FastAPI app
 app = FastAPI(
-    title=settings.app_name,
+    title=settings.APP_NAME,
     openapi_url="/v1/openapi.json",  # OpenAPI schema URL
-    docs_url=settings.docs_url  # Swagger documentation URL
+    docs_url=settings.DOCS_URL  # Swagger documentation URL
 )
 
 # Add CORS middleware
@@ -23,7 +33,7 @@ app.add_middleware(
 api_router = APIRouter()
 
 # Include routers (uncomment when adding routes)
-# api_router.include_router(data_load.router, prefix="/data-load", tags=["Data Loaders"])
+api_router.include_router(client.router, prefix="/client", tags=["Client"])
 
 # Register API Router with prefix
 app.include_router(api_router, prefix="/v1")
@@ -31,7 +41,7 @@ app.include_router(api_router, prefix="/v1")
 # Root route
 @app.get("/")
 async def root():
-    return {"phoenix": "API"}
+    return {"Phoenix": "API"}
 
 # Health check route
 @app.get("/health")

@@ -2,12 +2,12 @@ FROM python:3.12
 
 LABEL project=phoenix
 
-WORKDIR /app
+WORKDIR /code
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+COPY ./requirements.txt /code/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-COPY ./app /app/app
+COPY ./app /code/app
 
 ENV PYTHONPATH "/"
 
