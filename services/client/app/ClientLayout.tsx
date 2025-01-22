@@ -2,6 +2,7 @@
 
 import { SidebarProvider, SidebarTrigger } from '@/components/core-ui/sidebar'
 import { SideBar } from '@/components/ui/SideBar'
+import { Toaster } from '@/components/core-ui/toaster'
 
 export default function ClientLayout({
   children,
@@ -17,6 +18,7 @@ export default function ClientLayout({
         </div>
         {children}
       </main>
+      <Toaster />
     </SidebarProvider>
   )
 }

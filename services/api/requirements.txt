@@ -9,6 +9,7 @@ uvicorn[standard]
 sqlmodel
 sqlalchemy
 psycopg2-binary
+python-slugify
 
 # AI and Text Handling
 openai

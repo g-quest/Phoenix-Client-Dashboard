@@ -1,4 +1,13 @@
-import { Calendar, Home, Inbox, Search, Settings, Upload } from 'lucide-react'
+import {
+  Calendar,
+  Home,
+  Inbox,
+  Search,
+  Settings,
+  Upload,
+  Plus,
+  UserPlus2,
+} from 'lucide-react'
 
 import {
   Sidebar,
@@ -16,8 +25,13 @@ import { Separator } from '@/components/core-ui/separator'
 
 const internals = [
   {
+    title: 'Add Client',
+    url: '/internal/add-client',
+    icon: UserPlus2,
+  },
+  {
     title: 'CSV Uploader',
-    url: '#',
+    url: '/',
     icon: Upload,
   },
 ]
