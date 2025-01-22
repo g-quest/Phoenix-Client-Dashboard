@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Calendar,
   Home,
@@ -22,7 +24,9 @@ import {
   SidebarMenuItem,
 } from '@/components/core-ui/sidebar'
 import { Separator } from '@/components/core-ui/separator'
-
+import { useEffect } from 'react'
+import { useState } from 'react'
+import Link from 'next/link'
 const internals = [
   {
     title: 'Add Client',
@@ -36,18 +40,28 @@ const internals = [
   },
 ]
 
-const clients = [
-  {
-    name: 'Humanity Protocol',
-    url: '/clients/humanity-protocol',
-  },
-  {
-    name: 'io.net',
-    url: '/clients/io-net',
-  },
-]
-
 export function SideBar() {
+  const [clients, setClients] = useState([])
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API}/v1/client/`,
+        )
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        const data = await response.json()
+        setClients(data)
+      } catch (error) {
+        console.error('Failed to fetch clients:', error)
+      }
+    }
+
+    fetchClients()
+  }, [])
+
   return (
     <Sidebar>
       {/* <SidebarHeader /> */}
@@ -56,17 +70,23 @@ export function SideBar() {
         <SidebarGroup>
           <SidebarGroupLabel>Clients</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {clients.map((item) => (
-                <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <span>{item.name}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            {clients.length > 0 ? (
+              <SidebarMenu>
+                {clients
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((item) => (
+                    <SidebarMenuItem key={item.slug}>
+                      <SidebarMenuButton asChild>
+                        <Link href={`/clients/${item.slug}`}>
+                          <span>{item.name}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+              </SidebarMenu>
+            ) : (
+              <p>Error fetching clients. Please try again later.</p>
+            )}
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
