@@ -85,7 +85,11 @@ export function SideBar() {
                   ))}
               </SidebarMenu>
             ) : (
-              <p>Error fetching clients. Please try again later.</p>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <p>Loading Clients...</p>
+                </SidebarMenuItem>
+              </SidebarMenu>
             )}
           </SidebarGroupContent>
         </SidebarGroup>

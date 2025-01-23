@@ -12,6 +12,7 @@ import {
 import { Input } from '@/components/core-ui/input'
 import { Label } from '@/components/core-ui/label'
 import { ToastAction } from '@/components/core-ui/toast'
+import PageContainer from '@/components/ui/PageContainer'
 
 import { useToast } from '@/hooks/use-toast'
 import { useState } from 'react'
@@ -66,7 +67,7 @@ export default function AddClient() {
   }
 
   return (
-    <div className="flex justify-center items-center mt-10 ">
+    <PageContainer>
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>New Client</CardTitle>
@@ -103,6 +104,6 @@ export default function AddClient() {
           <Button onClick={handleSubmit}>Submit</Button>
         </CardFooter>
       </Card>
-    </div>
+    </PageContainer>
   )
 }

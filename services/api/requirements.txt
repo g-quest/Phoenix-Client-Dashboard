@@ -10,6 +10,7 @@ sqlmodel
 sqlalchemy
 psycopg2-binary
 python-slugify
+python-multipart
 
 # AI and Text Handling
 openai
@@ -23,3 +24,4 @@ beautifulsoup4
 lxml
 requests
 requests-html
+pandas
