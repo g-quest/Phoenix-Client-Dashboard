@@ -33,11 +33,11 @@ const internals = [
     url: '/internal/add-client',
     icon: UserPlus2,
   },
-  {
-    title: 'CSV Uploader',
-    url: '/',
-    icon: Upload,
-  },
+  // {
+  //   title: 'CSV Uploader',
+  //   url: '/',
+  //   icon: Upload,
+  // },
 ]
 
 export function SideBar() {

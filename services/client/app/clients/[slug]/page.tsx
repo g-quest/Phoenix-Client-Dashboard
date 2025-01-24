@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/core-ui/select'
+import OpenAI from 'openai'
 
 const chartConfig = {
   vanity_joins: {
@@ -60,6 +61,8 @@ export default function ClientPage({
   // console.log(slug)
   const [client, setClient] = useState(null)
   const [csvData, setCSVData] = useState(null)
+  const [insights, setInsights] = useState<string | null>(null)
+  const [loadingInsights, setLoadingInsights] = useState(false)
 
   const [timeRange, setTimeRange] = useState('3 months')
   const filteredData = csvData
@@ -77,7 +80,6 @@ export default function ClientPage({
         return date >= startDate
       })
     : []
-  console.log(filteredData) // Add this line to verify data
 
   useEffect(() => {
     const fetchClientData = async () => {
@@ -101,13 +103,67 @@ export default function ClientPage({
         `${process.env.NEXT_PUBLIC_API}/v1/client/${slug}/csv_data`,
       )
       const data = await response.json()
-      console.log('CSV DATA: ', data)
+      // console.log('CSV DATA: ', data)
       setCSVData(data)
     }
 
     fetchClientData()
     fetchCSVData()
-  }, [])
+  }, [slug])
+
+  useEffect(() => {
+    if (csvData) {
+      fetchInsights()
+    }
+  }, [csvData])
+
+  const fetchInsights = async () => {
+    try {
+      setLoadingInsights(true)
+      const openai = new OpenAI({
+        apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+        // apiKey:
+        //   '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',
+        dangerouslyAllowBrowser: true,
+      })
+
+      const response = await openai.chat.completions.create({
+        model: 'gpt-4o',
+        messages: [
+          {
+            role: 'system',
+            content:
+              'You are a data analyst that provides insights on the data provided.',
+          },
+          {
+            role: 'user',
+            content: `As a data analyst, please provide a detailed analysis of the following data: 
+            ${JSON.stringify(filteredData)}. 
+            
+            Focus on identifying trends, anomalies, and correlations between different types of joins (vanity, discovery, invites, integration, and others). Highlight any significant changes over time and suggest potential reasons or implications for these changes. Additionally, provide actionable recommendations based on the insights derived from the data.
+
+            Start directly with the analysis content without any introductory phrases.
+
+            Example of the desired output:
+
+            <p><b>Trends:</b> Vanity joins have increased by 20% over the last month, likely due to a new marketing campaign.</p>
+
+            <p><b>Anomalies:</b> A sudden spike in discovery joins on March 15th, possibly due to a viral event.</p>
+
+            <p><b>Correlations:</b> A strong correlation between invites and integration joins, suggesting effective cross-promotion.</p>
+
+            <p><b>Recommendations:</b> Continue the marketing efforts for vanity joins and investigate the cause of the spike in discovery joins.</p>`,
+          },
+        ],
+      })
+
+      setInsights(response.choices[0].message.content.trim())
+    } catch (error) {
+      console.error('Failed to fetch insights:', error)
+    } finally {
+      setLoadingInsights(false)
+    }
+  }
 
   return (
     <div>
@@ -308,6 +364,16 @@ export default function ClientPage({
             </ChartContainer>
           </CardContent>
         </Card>
+        {loadingInsights ? (
+          <div className="spinner mt-4"></div>
+        ) : (
+          insights && (
+            <div className="w-[650px] mt-4 p-4 bg-gray-100 rounded-lg">
+              <h3 className="text-2xl font-semibold mb-2">Insights</h3>
+              <div dangerouslySetInnerHTML={{ __html: insights }} />
+            </div>
+          )
+        )}
       </PageContainer>
     </div>
   )
