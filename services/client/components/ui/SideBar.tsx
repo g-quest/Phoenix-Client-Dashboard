@@ -67,10 +67,10 @@ export function SideBar() {
       {/* <SidebarHeader /> */}
       <Separator />
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Clients</SidebarGroupLabel>
-          <SidebarGroupContent>
-            {clients.length > 0 ? (
+        {clients.length > 0 && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Clients</SidebarGroupLabel>
+            <SidebarGroupContent>
               <SidebarMenu>
                 {clients
                   .sort((a, b) => a.name.localeCompare(b.name))
@@ -84,15 +84,9 @@ export function SideBar() {
                     </SidebarMenuItem>
                   ))}
               </SidebarMenu>
-            ) : (
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <p>Loading Clients...</p>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            )}
-          </SidebarGroupContent>
-        </SidebarGroup>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
         <SidebarGroup>
           <SidebarGroupLabel>Internal Tools</SidebarGroupLabel>
           <SidebarGroupContent>
