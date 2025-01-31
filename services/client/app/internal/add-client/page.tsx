@@ -20,6 +20,8 @@ import { useState } from 'react'
 export default function AddClient() {
   const [clientName, setClientName] = useState('')
   const [profileUrl, setProfileUrl] = useState('')
+  const [pocEmail, setPocEmail] = useState('')
+  const [pocPhone, setPocPhone] = useState('')
   const { toast } = useToast()
 
   const handleSubmit = async (event) => {
@@ -27,6 +29,8 @@ export default function AddClient() {
 
     const clientData = {
       name: clientName,
+      poc_email: pocEmail,
+      poc_phone: pocPhone,
       profileUrl: profileUrl || undefined,
     }
 
@@ -72,12 +76,15 @@ export default function AddClient() {
         <CardHeader>
           <CardTitle>New Client</CardTitle>
           <CardDescription>Add a new client to the system.</CardDescription>
+          <CardDescription className="text-xs font-bold">
+            * denotes required fields
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Client Name</Label>
+                <Label htmlFor="name">Name*</Label>
                 <Input
                   id="name"
                   placeholder="Name of the client"
@@ -88,7 +95,27 @@ export default function AddClient() {
                 />
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Client Logo URL (optional)</Label>
+                <Label htmlFor="name">POC Phone</Label>
+                <Input
+                  id="name"
+                  placeholder="(888) 888-8888"
+                  type="tel"
+                  value={pocPhone}
+                  onChange={(e) => setPocPhone(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">POC Email</Label>
+                <Input
+                  id="name"
+                  placeholder="email@company.com"
+                  type="email"
+                  value={pocEmail}
+                  onChange={(e) => setPocEmail(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Logo URL</Label>
                 <Input
                   id="name"
                   placeholder="URL of the client's logo"
@@ -97,6 +124,9 @@ export default function AddClient() {
                   onChange={(e) => setProfileUrl(e.target.value)}
                 />
               </div>
+              <p className="text-xs text-gray-500">
+                TODO: Add all required fields
+              </p>
             </div>
           </form>
         </CardContent>
