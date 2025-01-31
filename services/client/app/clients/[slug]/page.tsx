@@ -29,6 +29,7 @@ import {
   SelectValue,
 } from '@/components/core-ui/select'
 import OpenAI from 'openai'
+import { Separator } from '@/components/core-ui/separator'
 
 const chartConfig = {
   vanity_joins: {
@@ -164,7 +165,9 @@ export default function ClientPage({
     }
   }
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0]
     if (!file) return
 
@@ -177,7 +180,7 @@ export default function ClientPage({
         {
           method: 'POST',
           body: formData,
-        }
+        },
       )
 
       if (!response.ok) {
@@ -185,8 +188,8 @@ export default function ClientPage({
       }
 
       toast({
-        title: "Success",
-        description: "CSV file uploaded successfully",
+        title: 'Success',
+        description: 'CSV file uploaded successfully',
       })
 
       // Refresh the data
@@ -194,9 +197,9 @@ export default function ClientPage({
     } catch (error) {
       console.error('Upload failed:', error)
       toast({
-        title: "Error",
-        description: "Failed to upload CSV file",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to upload CSV file',
+        variant: 'destructive',
       })
     }
   }
@@ -205,7 +208,7 @@ export default function ClientPage({
     <div>
       <PageContainer>
         <ClientHeading client={client} />
-        <div className="mb-4">
+        <div className="mb-4 mr-0 ml-auto">
           <input
             type="file"
             accept=".csv"
@@ -215,10 +218,63 @@ export default function ClientPage({
           />
           <label
             htmlFor="csv-upload"
-            className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-md cursor-pointer"
+            className="text-sm inline-flex items-center px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-md cursor-pointer"
           >
             Upload CSV
           </label>
+        </div>
+        {/* Key Metrics */}
+        <div className="w-full">
+          <div className="h-[300px] w-full bg-white flex items-center justify-center rounded-xl">
+            <h4>Key Metrics</h4>
+          </div>
+          <div className="grid grid-cols-3 gap-4 w-full my-4">
+            <div className="h-[300px] w-full bg-white flex items-center justify-center rounded-xl">
+              <h4>Community</h4>
+            </div>
+            <div className="h-[300px] w-full bg-white flex items-center justify-center rounded-xl">
+              <h4>Social</h4>
+            </div>
+            <div className="h-[300px] w-full bg-white flex items-center justify-center rounded-xl">
+              <h4>Web / App</h4>
+            </div>
+          </div>
+        </div>
+        {/* Socials Growth and Activation */}
+        <Separator className="my-8" />
+        <div className="w-full py-4">
+          <h4 className="text-center mb-8">Last 30 Days</h4>
+          <div className="grid grid-cols-4 gap-4 w-full my-4">
+            <div className="h-[300px] w-full bg-white flex items-center justify-center rounded-xl">
+              <h4>Discord</h4>
+            </div>
+            <div className="h-[300px] w-full bg-white flex items-center justify-center rounded-xl">
+              <h4>Telegram</h4>
+            </div>
+            <div className="h-[300px] w-full bg-white flex items-center justify-center rounded-xl">
+              <h4>Web / App</h4>
+            </div>
+            <div className="h-[300px] w-full bg-white flex items-center justify-center rounded-xl">
+              <h4>Social</h4>
+            </div>
+          </div>
+          <div className="grid grid-cols-5 gap-4 w-full my-4">
+            <div className="h-[300px] w-full bg-white flex items-center justify-center rounded-xl">
+              <h4>Discord vs Telegram</h4>
+            </div>
+            <div className="h-[300px] w-full bg-white flex items-center justify-center rounded-xl">
+              <h4>Discord vs X</h4>
+            </div>
+            <div className="h-[300px] w-full bg-white flex items-center justify-center rounded-xl">
+              <h4>Discord vs Web</h4>
+            </div>
+            <div className="h-[300px] w-full bg-white flex items-center justify-center rounded-xl">
+              <h4>X vs Y</h4>
+            </div>
+            <div className="h-[300px] w-full bg-white flex items-center justify-center rounded-xl">
+              <h4>X vs Y</h4>
+            </div>
+          </div>
         </div>
         {csvData && csvData.length > 0 && (
           <>
