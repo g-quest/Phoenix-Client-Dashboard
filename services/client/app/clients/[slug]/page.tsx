@@ -225,8 +225,232 @@ export default function ClientPage({
         </div>
         {/* Key Metrics */}
         <div className="w-full">
-          <div className="h-[300px] w-full bg-white flex items-center justify-center rounded-xl">
-            <h4>Key Metrics</h4>
+          <div className="w-full bg-white flex items-center justify-center rounded-xl p-8">
+            {csvData && csvData.length > 0 ? (
+              <div className="w-full grid grid-cols-2 gap-4">
+                <Card className="border-none shadow-none">
+                  <CardHeader className="flex items-center gap-2 space-y-0 py-5 sm:flex-row">
+                    <div className="grid flex-1 gap-1 text-center sm:text-left">
+                      <CardTitle>Example Key Metrics</CardTitle>
+                      <CardDescription>
+                        Total visitors in the last {timeRange}.
+                      </CardDescription>
+                    </div>
+                    <Select value={timeRange} onValueChange={setTimeRange}>
+                      <SelectTrigger
+                        className="w-[160px] rounded-lg sm:ml-auto"
+                        aria-label="Select a value"
+                      >
+                        <SelectValue placeholder="Last 3 months" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl">
+                        <SelectItem value="3 months" className="rounded-lg">
+                          Last 3 months
+                        </SelectItem>
+                        <SelectItem value="30 days" className="rounded-lg">
+                          Last 30 days
+                        </SelectItem>
+                        <SelectItem value="7 days" className="rounded-lg">
+                          Last 7 days
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </CardHeader>
+                  <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+                    <ChartContainer
+                      config={chartConfig}
+                      className="aspect-auto h-[250px] w-full"
+                    >
+                      <AreaChart data={filteredData}>
+                        <defs>
+                          <linearGradient
+                            id="vanityGradient"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop
+                              offset="0%"
+                              stopColor={chartConfig.vanity_joins.color}
+                              stopOpacity={0.8}
+                            />
+                            <stop
+                              offset="70%"
+                              stopColor={chartConfig.vanity_joins.color}
+                              stopOpacity={0.3}
+                            />
+                          </linearGradient>
+                          <linearGradient
+                            id="discoveryGradient"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop
+                              offset="0%"
+                              stopColor={chartConfig.discovery_joins.color}
+                              stopOpacity={0.8}
+                            />
+                            <stop
+                              offset="70%"
+                              stopColor={chartConfig.discovery_joins.color}
+                              stopOpacity={0.3}
+                            />
+                          </linearGradient>
+                          <linearGradient
+                            id="invitesGradient"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop
+                              offset="0%"
+                              stopColor={chartConfig.invites.color}
+                              stopOpacity={0.8}
+                            />
+                            <stop
+                              offset="70%"
+                              stopColor={chartConfig.invites.color}
+                              stopOpacity={0.3}
+                            />
+                          </linearGradient>
+                          <linearGradient
+                            id="integrationGradient"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop
+                              offset="0%"
+                              stopColor={chartConfig.integration_joins.color}
+                              stopOpacity={0.8}
+                            />
+                            <stop
+                              offset="70%"
+                              stopColor={chartConfig.integration_joins.color}
+                              stopOpacity={0.3}
+                            />
+                          </linearGradient>
+                          <linearGradient
+                            id="otherGradient"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop
+                              offset="0%"
+                              stopColor={chartConfig.other_joins.color}
+                              stopOpacity={0.8}
+                            />
+                            <stop
+                              offset="70%"
+                              stopColor={chartConfig.other_joins.color}
+                              stopOpacity={0.3}
+                            />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid vertical={false} />
+                        <XAxis
+                          dataKey="date"
+                          tickLine={false}
+                          axisLine={false}
+                          tickMargin={8}
+                          minTickGap={32}
+                          tickFormatter={(value) => {
+                            const date = new Date(value)
+                            return date.toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                            })
+                          }}
+                        />
+                        <ChartTooltip
+                          cursor={false}
+                          content={
+                            <ChartTooltipContent
+                              labelFormatter={(value) => {
+                                return new Date(value).toLocaleDateString(
+                                  'en-US',
+                                  {
+                                    month: 'short',
+                                    day: 'numeric',
+                                  },
+                                )
+                              }}
+                              indicator="dot"
+                            />
+                          }
+                        />
+                        <Area
+                          dataKey="vanity_joins"
+                          type="natural"
+                          fill="url(#vanityGradient)"
+                          stroke={chartConfig.vanity_joins.color}
+                          stackId="a"
+                        />
+                        <Area
+                          dataKey="discovery_joins"
+                          type="natural"
+                          fill="url(#discoveryGradient)"
+                          stroke={chartConfig.discovery_joins.color}
+                          stackId="a"
+                        />
+                        <Area
+                          dataKey="invites"
+                          type="natural"
+                          fill="url(#invitesGradient)"
+                          stroke={chartConfig.invites.color}
+                          stackId="a"
+                        />
+                        <Area
+                          dataKey="integration_joins"
+                          type="natural"
+                          fill="url(#integrationGradient)"
+                          stroke={chartConfig.integration_joins.color}
+                          stackId="a"
+                        />
+                        <Area
+                          dataKey="other_joins"
+                          type="natural"
+                          fill="url(#otherGradient)"
+                          stroke={chartConfig.other_joins.color}
+                          stackId="a"
+                        />
+                        <ChartLegend content={<ChartLegendContent />} />
+                      </AreaChart>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+                <div className="w-full">
+                  {loadingInsights ? (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <div className="spinner" />
+                    </div>
+                  ) : (
+                    insights && (
+                      <div className="rounded-lg">
+                        <h3 className="text-2xl font-semibold mb-2">
+                          Example Insights
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-2">
+                          AI generated
+                        </p>
+                        <div dangerouslySetInnerHTML={{ __html: insights }} />
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="w-full h-[300px] flex items-center justify-center">
+                <h4>Key Metrics</h4>
+              </div>
+            )}
           </div>
           <div className="grid grid-cols-3 gap-4 w-full my-4">
             <div className="h-[300px] w-full bg-white flex items-center justify-center rounded-xl">
@@ -276,215 +500,6 @@ export default function ClientPage({
             </div>
           </div>
         </div>
-        {csvData && csvData.length > 0 && (
-          <>
-            <Card>
-              <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
-                <div className="grid flex-1 gap-1 text-center sm:text-left">
-                  <CardTitle>Growth and Activation</CardTitle>
-                  <CardDescription>
-                    Total visitors in the last {timeRange}.
-                  </CardDescription>
-                </div>
-                <Select value={timeRange} onValueChange={setTimeRange}>
-                  <SelectTrigger
-                    className="w-[160px] rounded-lg sm:ml-auto"
-                    aria-label="Select a value"
-                  >
-                    <SelectValue placeholder="Last 3 months" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    <SelectItem value="3 months" className="rounded-lg">
-                      Last 3 months
-                    </SelectItem>
-                    <SelectItem value="30 days" className="rounded-lg">
-                      Last 30 days
-                    </SelectItem>
-                    <SelectItem value="7 days" className="rounded-lg">
-                      Last 7 days
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </CardHeader>
-              <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-                <ChartContainer
-                  config={chartConfig}
-                  className="aspect-auto h-[250px] w-full"
-                >
-                  <AreaChart data={filteredData}>
-                    <defs>
-                      <linearGradient
-                        id="vanityGradient"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="0%"
-                          stopColor={chartConfig.vanity_joins.color}
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="70%"
-                          stopColor={chartConfig.vanity_joins.color}
-                          stopOpacity={0.3}
-                        />
-                      </linearGradient>
-                      <linearGradient
-                        id="discoveryGradient"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="0%"
-                          stopColor={chartConfig.discovery_joins.color}
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="70%"
-                          stopColor={chartConfig.discovery_joins.color}
-                          stopOpacity={0.3}
-                        />
-                      </linearGradient>
-                      <linearGradient
-                        id="invitesGradient"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="0%"
-                          stopColor={chartConfig.invites.color}
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="70%"
-                          stopColor={chartConfig.invites.color}
-                          stopOpacity={0.3}
-                        />
-                      </linearGradient>
-                      <linearGradient
-                        id="integrationGradient"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="0%"
-                          stopColor={chartConfig.integration_joins.color}
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="70%"
-                          stopColor={chartConfig.integration_joins.color}
-                          stopOpacity={0.3}
-                        />
-                      </linearGradient>
-                      <linearGradient
-                        id="otherGradient"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="0%"
-                          stopColor={chartConfig.other_joins.color}
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="70%"
-                          stopColor={chartConfig.other_joins.color}
-                          stopOpacity={0.3}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid vertical={false} />
-                    <XAxis
-                      dataKey="date"
-                      tickLine={false}
-                      axisLine={false}
-                      tickMargin={8}
-                      minTickGap={32}
-                      tickFormatter={(value) => {
-                        const date = new Date(value)
-                        return date.toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                        })
-                      }}
-                    />
-                    <ChartTooltip
-                      cursor={false}
-                      content={
-                        <ChartTooltipContent
-                          labelFormatter={(value) => {
-                            return new Date(value).toLocaleDateString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                            })
-                          }}
-                          indicator="dot"
-                        />
-                      }
-                    />
-                    <Area
-                      dataKey="vanity_joins"
-                      type="natural"
-                      fill="url(#vanityGradient)"
-                      stroke={chartConfig.vanity_joins.color}
-                      stackId="a"
-                    />
-                    <Area
-                      dataKey="discovery_joins"
-                      type="natural"
-                      fill="url(#discoveryGradient)"
-                      stroke={chartConfig.discovery_joins.color}
-                      stackId="a"
-                    />
-                    <Area
-                      dataKey="invites"
-                      type="natural"
-                      fill="url(#invitesGradient)"
-                      stroke={chartConfig.invites.color}
-                      stackId="a"
-                    />
-                    <Area
-                      dataKey="integration_joins"
-                      type="natural"
-                      fill="url(#integrationGradient)"
-                      stroke={chartConfig.integration_joins.color}
-                      stackId="a"
-                    />
-                    <Area
-                      dataKey="other_joins"
-                      type="natural"
-                      fill="url(#otherGradient)"
-                      stroke={chartConfig.other_joins.color}
-                      stackId="a"
-                    />
-                    <ChartLegend content={<ChartLegendContent />} />
-                  </AreaChart>
-                </ChartContainer>
-              </CardContent>
-            </Card>
-            {loadingInsights ? (
-              <div className="spinner mt-4"></div>
-            ) : (
-              insights && (
-                <div className="w-[650px] mt-4 p-4 bg-gray-100 rounded-lg">
-                  <h3 className="text-2xl font-semibold mb-2">Insights</h3>
-                  <div dangerouslySetInnerHTML={{ __html: insights }} />
-                </div>
-              )
-            )}
-          </>
-        )}
       </PageContainer>
     </div>
   )
