@@ -24,7 +24,7 @@ const chartConfig = {
     color: 'var(--chart-1)',
   },
   pct_communicated: {
-    label: 'Percentage Communicated',
+    label: '% Communicated',
     color: 'var(--chart-2)',
   },
 } satisfies ChartConfig

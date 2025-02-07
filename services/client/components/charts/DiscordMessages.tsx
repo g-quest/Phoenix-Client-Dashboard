@@ -24,7 +24,7 @@ const chartConfig = {
     color: 'var(--chart-1)',
   },
   messages_per_communicator: {
-    label: 'Messages per Communicator',
+    label: 'Messages Per User',
     color: 'var(--chart-2)',
   },
 } satisfies ChartConfig

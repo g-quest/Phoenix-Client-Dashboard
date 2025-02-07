@@ -120,7 +120,7 @@ export default function ChartDiscordGrowth(props) {
         <CardContent className="p-4 sm:px-6 sm:pt-2">
           <div className="mb-4">
             <p>
-              <span className="font-bold">Total new users:</span>{' '}
+              <span className="font-bold">Total New Users:</span>{' '}
               {totalNewUsers}
             </p>
           </div>
@@ -252,7 +252,7 @@ export default function ChartDiscordGrowth(props) {
                     />
                   }
                 />
-                <Area
+                {/* <Area
                   dataKey="other_joins"
                   type="natural"
                   fill="url(#otherGradient)"
@@ -265,7 +265,7 @@ export default function ChartDiscordGrowth(props) {
                   fill="url(#integrationGradient)"
                   stroke={chartConfig.integration_joins.color}
                   stackId="a"
-                />
+                /> */}
                 <Area
                   dataKey="discovery_joins"
                   type="natural"
