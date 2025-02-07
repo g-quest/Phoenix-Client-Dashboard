@@ -11,27 +11,22 @@ import {
 } from '@/components/core-ui/card'
 import { Input } from '@/components/core-ui/input'
 import { Label } from '@/components/core-ui/label'
-import { ToastAction } from '@/components/core-ui/toast'
 import PageContainer from '@/components/ui/PageContainer'
 
 import { useToast } from '@/hooks/use-toast'
 import { useState } from 'react'
+import { useClientContext } from '../../../context/ClientContext'
 
 export default function AddClient() {
   const [clientName, setClientName] = useState('')
-  const [profileUrl, setProfileUrl] = useState('')
-  const [pocEmail, setPocEmail] = useState('')
-  const [pocPhone, setPocPhone] = useState('')
   const { toast } = useToast()
+  const { refreshClients } = useClientContext()
 
   const handleSubmit = async (event) => {
     event.preventDefault()
 
     const clientData = {
       name: clientName,
-      poc_email: pocEmail,
-      poc_phone: pocPhone,
-      profileUrl: profileUrl || undefined,
     }
 
     try {
@@ -57,7 +52,8 @@ export default function AddClient() {
         description: `${clientName} has been added to the system.`,
       })
       setClientName('')
-      setProfileUrl('')
+
+      refreshClients()
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'An unknown error occurred'
@@ -76,9 +72,6 @@ export default function AddClient() {
         <CardHeader>
           <CardTitle>New Client</CardTitle>
           <CardDescription>Add a new client to the system.</CardDescription>
-          <CardDescription className="text-xs font-bold">
-            * denotes required fields
-          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
@@ -87,45 +80,14 @@ export default function AddClient() {
                 <Label htmlFor="name">Name*</Label>
                 <Input
                   id="name"
-                  placeholder="Name of the client"
                   type="text"
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
                   required
                 />
               </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">POC Phone</Label>
-                <Input
-                  id="name"
-                  placeholder="(888) 888-8888"
-                  type="tel"
-                  value={pocPhone}
-                  onChange={(e) => setPocPhone(e.target.value)}
-                />
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">POC Email</Label>
-                <Input
-                  id="name"
-                  placeholder="email@company.com"
-                  type="email"
-                  value={pocEmail}
-                  onChange={(e) => setPocEmail(e.target.value)}
-                />
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Logo URL</Label>
-                <Input
-                  id="name"
-                  placeholder="URL of the client's logo"
-                  type="url"
-                  value={profileUrl}
-                  onChange={(e) => setProfileUrl(e.target.value)}
-                />
-              </div>
               <p className="text-xs text-gray-500">
-                TODO: Add all required fields
+                NOTE: More fields can be added in the future.
               </p>
             </div>
           </form>

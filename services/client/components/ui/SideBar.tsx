@@ -1,22 +1,11 @@
 'use client'
 
-import {
-  Calendar,
-  Home,
-  Inbox,
-  Search,
-  Settings,
-  Upload,
-  Plus,
-  UserPlus2,
-} from 'lucide-react'
+import { UserPlus2 } from 'lucide-react'
 
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
-  SidebarHeader,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
@@ -24,24 +13,21 @@ import {
   SidebarMenuItem,
 } from '@/components/core-ui/sidebar'
 import { Separator } from '@/components/core-ui/separator'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useClientContext } from '@/context/ClientContext'
+
 const internals = [
   {
     title: 'Add Client',
     url: '/internal/add-client',
     icon: UserPlus2,
   },
-  // {
-  //   title: 'CSV Uploader',
-  //   url: '/',
-  //   icon: Upload,
-  // },
 ]
 
 export function SideBar() {
   const [clients, setClients] = useState([])
+  const { refreshClients } = useClientContext()
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -60,11 +46,10 @@ export function SideBar() {
     }
 
     fetchClients()
-  }, [])
+  }, [refreshClients])
 
   return (
     <Sidebar>
-      {/* <SidebarHeader /> */}
       <Separator />
       <SidebarContent>
         {clients.length > 0 && (
@@ -105,7 +90,6 @@ export function SideBar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      {/* <SidebarFooter /> */}
     </Sidebar>
   )
 }
