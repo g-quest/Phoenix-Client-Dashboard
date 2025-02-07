@@ -61,7 +61,7 @@ export default function ChartDiscordGrowth(props) {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/v1/csv/upload_csv/?client_slug=${slug}`,
+        `${process.env.NEXT_PUBLIC_API}/v1/discord/upload_growth_csv/?client_slug=${slug}`,
         {
           method: 'POST',
           body: formData,
@@ -75,6 +75,7 @@ export default function ChartDiscordGrowth(props) {
       toast({
         title: 'Success',
         description: 'CSV file uploaded successfully',
+        variant: 'success',
       })
 
       // Refresh the data
@@ -279,7 +280,7 @@ export default function ChartDiscordGrowth(props) {
           ) : (
             <div className="h-[250px] w-full bg-white flex flex-col items-center justify-center text-center">
               <h4>No Data Available</h4>
-              <p>Please update with the latest data to see the analytics.</p>
+              <p>Latest data not found. Please update or try again.</p>
             </div>
           )}
         </CardContent>

@@ -1,12 +1,12 @@
 from fastapi import HTTPException, UploadFile, File
 from sqlmodel import Session
-from app.models.csv import CSVData
+from app.models.discord_growth import DiscordGrowth
 import os
 import pandas as pd
 import tempfile
 
 
-class CSV:
+class DiscordGrowth:
 
     async def upload_csv(self, db: Session, client_slug: str, file: UploadFile = File(...)):
 
@@ -35,7 +35,7 @@ class CSV:
 
             # Insert data into the database
             for _, row in df.iterrows():
-                csv_data = CSVData(
+                discord_growth_data = DiscordGrowth(
                     client_slug=client_slug,
                     date=row["day_pt"],
                     discovery_joins=row["discovery_joins"],
@@ -47,7 +47,7 @@ class CSV:
                     other_joins=row["other_joins"],
                     total_joins=row["total_joins"],
                 )
-                db.add(csv_data)
+                db.add(discord_growth_data)
             db.commit()
 
         except Exception as e:
@@ -61,4 +61,4 @@ class CSV:
         return {"detail": "CSV uploaded and processed successfully!"}
 
 
-csv = CSV()
+discord_growth = DiscordGrowth()

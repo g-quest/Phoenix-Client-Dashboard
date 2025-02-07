@@ -4,7 +4,7 @@ from sqlmodel import Field
 from datetime import datetime
 
 # Example CSV data associated with a client
-class CSVData(Base, table=True):
+class DiscordGrowth(Base, table=True): 
     client_slug: str
     date: str
     discovery_joins: int

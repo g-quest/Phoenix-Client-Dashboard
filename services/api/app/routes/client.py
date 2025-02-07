@@ -23,7 +23,7 @@ def get_client(*, db: Session = Depends(db.get_db), slug: str):
         raise HTTPException(status_code=404, detail="Client not found")
     return client
 
-@router.get("/{slug}/csv_data")
-def get_client_csv_data(slug: str, db: Session = Depends(db.get_db)):
-    data = crud.csv.get_all_by_client_slug(db, slug)
+@router.get("/{slug}/discord_growth")
+def get_discord_growth_data(slug: str, db: Session = Depends(db.get_db)):
+    data = crud.discord_growth.get_all_by_client_slug(db, slug)
     return data

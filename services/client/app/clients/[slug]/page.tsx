@@ -45,7 +45,7 @@ export default function ClientPage({
 
   const fetchDiscordGrowthData = async () => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API}/v1/client/${slug}/csv_data`,
+      `${process.env.NEXT_PUBLIC_API}/v1/client/${slug}/discord_growth`,
     )
     const data = await response.json()
     setDiscordGrowthData(data)
