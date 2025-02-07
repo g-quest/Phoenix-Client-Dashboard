@@ -95,8 +95,8 @@ export default function ChartDiscordGrowth(props) {
   return (
     <div className="w-full">
       <Card className="border-none shadow-none">
-        <CardHeader className="flex flex-row gap-2 pt-5 pb-2">
-          <div className="grid text-left w-full">
+        <CardHeader className="flex flex-row gap-2 py-5">
+          <div className="grid text-left">
             <CardTitle className="text-lg">{chartTitle}</CardTitle>
             <CardDescription>{chartDescription}</CardDescription>
           </div>
@@ -117,10 +117,13 @@ export default function ChartDiscordGrowth(props) {
           </div>
         </CardHeader>
         <Separator className="my-2" />
-        <CardContent className="px-2 py-4 sm:px-6 sm:pt-2">
-          <p className="mb-2">
-            <span className="font-bold">Total new users:</span> {totalNewUsers}
-          </p>
+        <CardContent className="p-4 sm:px-6 sm:pt-2">
+          <div className="mb-4">
+            <p>
+              <span className="font-bold">Total new users:</span>{' '}
+              {totalNewUsers}
+            </p>
+          </div>
           {chartData && chartData.length > 0 ? (
             <ChartContainer
               config={chartConfig}

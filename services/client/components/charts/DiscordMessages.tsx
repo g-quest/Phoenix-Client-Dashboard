@@ -19,28 +19,29 @@ import {
 import { Separator } from '@/components/core-ui/separator'
 
 const chartConfig = {
-  visitors: {
-    label: 'Visitors',
-    color: 'var(--chart-2)',
-  },
-  pct_communicated: {
-    label: 'Percentage Communicated',
+  messages: {
+    label: 'Messages',
     color: 'var(--chart-1)',
+  },
+  messages_per_communicator: {
+    label: 'Messages per Communicator',
+    color: 'var(--chart-2)',
   },
 } satisfies ChartConfig
 
-export default function ChartDiscordEngagement(props) {
+export default function ChartDiscordMessages(props) {
   const {
     slug,
     chartData,
     chartTitle,
     chartDescription,
-    fetchDiscordEngagementData,
+    fetchDiscordMessagesData,
     toast,
-    totalVisitors,
+    totalMessages,
+    averageMessagesPerCommunicator,
   } = props
 
-  const handleEngagementFileUpload = async (
+  const handleMessagesFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0]
@@ -51,7 +52,7 @@ export default function ChartDiscordEngagement(props) {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/v1/discord/upload/engagement_csv/?client_slug=${slug}&csv_type=engagement`,
+        `${process.env.NEXT_PUBLIC_API}/v1/discord/upload/engagement_csv/?client_slug=${slug}&csv_type=messages`,
         {
           method: 'POST',
           body: formData,
@@ -69,7 +70,7 @@ export default function ChartDiscordEngagement(props) {
       })
 
       // Refresh the data
-      await fetchDiscordEngagementData()
+      await fetchDiscordMessagesData()
     } catch (error) {
       console.error('Upload failed:', error)
       toast({
@@ -92,12 +93,12 @@ export default function ChartDiscordEngagement(props) {
             <input
               type="file"
               accept=".csv"
-              onChange={handleEngagementFileUpload}
+              onChange={handleMessagesFileUpload}
               className="hidden"
-              id="engagement-csv-upload"
+              id="messages-csv-upload"
             />
             <label
-              htmlFor="engagement-csv-upload"
+              htmlFor="messages-csv-upload"
               className="text-primary cursor-pointer"
             >
               <Upload />
@@ -108,7 +109,11 @@ export default function ChartDiscordEngagement(props) {
         <CardContent className="p-4 sm:px-6 sm:pt-2">
           <div className="mb-4">
             <p>
-              <span className="font-bold">Total Visitors:</span> {totalVisitors}
+              <span className="font-bold">Total Messages:</span> {totalMessages}
+            </p>
+            <p>
+              <span className="font-bold">Average Messages Per User:</span>{' '}
+              {averageMessagesPerCommunicator}
             </p>
           </div>
           {chartData && chartData.length > 0 ? (
@@ -119,7 +124,7 @@ export default function ChartDiscordEngagement(props) {
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient
-                    id="visitorsGradient"
+                    id="messagesGradient"
                     x1="0"
                     y1="0"
                     x2="0"
@@ -127,17 +132,17 @@ export default function ChartDiscordEngagement(props) {
                   >
                     <stop
                       offset="0%"
-                      stopColor={chartConfig.visitors.color}
+                      stopColor={chartConfig.messages.color}
                       stopOpacity={0.8}
                     />
                     <stop
                       offset="70%"
-                      stopColor={chartConfig.visitors.color}
+                      stopColor={chartConfig.messages.color}
                       stopOpacity={0.3}
                     />
                   </linearGradient>
                   <linearGradient
-                    id="pct_communicatedGradient"
+                    id="messages_per_communicatorGradient"
                     x1="0"
                     y1="0"
                     x2="0"
@@ -145,12 +150,12 @@ export default function ChartDiscordEngagement(props) {
                   >
                     <stop
                       offset="0%"
-                      stopColor={chartConfig.pct_communicated.color}
+                      stopColor={chartConfig.messages_per_communicator.color}
                       stopOpacity={0.8}
                     />
                     <stop
                       offset="70%"
-                      stopColor={chartConfig.pct_communicated.color}
+                      stopColor={chartConfig.messages_per_communicator.color}
                       stopOpacity={0.3}
                     />
                   </linearGradient>
@@ -188,18 +193,18 @@ export default function ChartDiscordEngagement(props) {
                 />
                 <Area
                   yAxisId="left"
-                  dataKey="visitors"
+                  dataKey="messages"
                   type="natural"
-                  fill="url(#visitorsGradient)"
-                  stroke={chartConfig.visitors.color}
+                  fill="url(#messagesGradient)"
+                  stroke={chartConfig.messages.color}
                   stackId="a"
                 />
                 <Area
                   yAxisId="right"
-                  dataKey="pct_communicated"
+                  dataKey="messages_per_communicator"
                   type="natural"
-                  fill="url(#pct_communicatedGradient)"
-                  stroke={chartConfig.pct_communicated.color}
+                  fill="url(#messages_per_communicatorGradient)"
+                  stroke={chartConfig.messages_per_communicator.color}
                   stackId="a"
                 />
                 <ChartLegend content={<ChartLegendContent />} />
