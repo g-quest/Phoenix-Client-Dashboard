@@ -82,8 +82,8 @@ export default function ChartDiscordEngagement(props) {
     <div className="w-full">
       <Card className="border-none shadow-none">
         <CardHeader className="flex flex-row gap-2 py-5">
-          <div className="grid gap-1 text-left">
-            <CardTitle>{chartTitle}</CardTitle>
+          <div className="grid text-left">
+            <CardTitle className="text-lg">{chartTitle}</CardTitle>
             <CardDescription>{chartDescription}</CardDescription>
           </div>
           <div className="mr-0 ml-auto">

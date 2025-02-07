@@ -28,6 +28,7 @@ export default function ClientPage({
   const [filteredGrowthData, setFilteredGrowthData] = useState([])
   const [filteredEngagementData, setFilteredEngagementData] = useState([])
   const [timeRange, setTimeRange] = useState('3 months')
+  const [totalNewUsers, setTotalNewUsers] = useState(0)
 
   const fetchClientData = async () => {
     try {
@@ -76,6 +77,7 @@ export default function ClientPage({
       } else if (timeRange === '7 days') {
         daysToSubtract = 7
       }
+
       const startDate = new Date(referenceDate)
       startDate.setDate(startDate.getDate() - daysToSubtract)
 
@@ -84,7 +86,12 @@ export default function ClientPage({
         return date >= startDate
       })
 
+      const totalUsers = newFilteredData
+        .reduce((sum, item) => sum + item.total_joins, 0)
+        .toLocaleString()
+
       setFilteredGrowthData(newFilteredData)
+      setTotalNewUsers(totalUsers)
     }
   }, [discordGrowthData, timeRange])
 
@@ -143,9 +150,10 @@ export default function ClientPage({
                 slug={slug}
                 chartData={filteredGrowthData}
                 chartTitle="Discord Growth"
-                chartDescription={`Total new members in the last ${timeRange}.`}
+                chartDescription={`New member activity in the last ${timeRange}.`}
                 fetchDiscordGrowthData={fetchDiscordGrowthData}
                 toast={toast}
+                totalNewUsers={totalNewUsers}
               />
             </div>
             <div className="w-full bg-white flex items-center justify-center rounded-xl">
@@ -153,7 +161,7 @@ export default function ClientPage({
                 slug={slug}
                 chartData={filteredEngagementData}
                 chartTitle="Discord Engagement"
-                chartDescription={`Total engagement in the last ${timeRange}.`}
+                chartDescription={`Engagement in the last ${timeRange}.`}
                 fetchDiscordEngagementData={fetchDiscordEngagementData}
                 toast={toast}
               />

@@ -16,6 +16,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/core-ui/chart'
+import { Separator } from '@/components/core-ui/separator'
 
 const chartConfig = {
   vanity_joins: {
@@ -48,6 +49,7 @@ export default function ChartDiscordGrowth(props) {
     chartDescription,
     fetchDiscordGrowthData,
     toast,
+    totalNewUsers,
   } = props
 
   const handleGrowthFileUpload = async (
@@ -93,9 +95,9 @@ export default function ChartDiscordGrowth(props) {
   return (
     <div className="w-full">
       <Card className="border-none shadow-none">
-        <CardHeader className="flex flex-row gap-2 py-5">
-          <div className="grid gap-1 text-left">
-            <CardTitle>{chartTitle}</CardTitle>
+        <CardHeader className="flex flex-row gap-2 pt-5 pb-2">
+          <div className="grid text-left w-full">
+            <CardTitle className="text-lg">{chartTitle}</CardTitle>
             <CardDescription>{chartDescription}</CardDescription>
           </div>
           <div className="mr-0 ml-auto">
@@ -114,7 +116,11 @@ export default function ChartDiscordGrowth(props) {
             </label>
           </div>
         </CardHeader>
-        <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+        <Separator className="my-2" />
+        <CardContent className="px-2 py-4 sm:px-6 sm:pt-2">
+          <p className="mb-2">
+            <span className="font-bold">Total new users:</span> {totalNewUsers}
+          </p>
           {chartData && chartData.length > 0 ? (
             <ChartContainer
               config={chartConfig}
