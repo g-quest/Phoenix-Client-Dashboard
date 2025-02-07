@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from '@/components/core-ui/select'
 import ChartDiscordGrowth from '@/components/charts/DiscordGrowth'
-
+import ChartDiscordEngagement from '@/components/charts/DiscordEngagement'
 export default function ClientPage({
   params,
 }: {
@@ -24,7 +24,9 @@ export default function ClientPage({
   // console.log(slug)
   const [client, setClient] = useState(null)
   const [discordGrowthData, setDiscordGrowthData] = useState(null)
-  const [filteredData, setFilteredData] = useState([])
+  const [discordEngagementData, setDiscordEngagementData] = useState(null)
+  const [filteredGrowthData, setFilteredGrowthData] = useState([])
+  const [filteredEngagementData, setFilteredEngagementData] = useState([])
   const [timeRange, setTimeRange] = useState('3 months')
 
   const fetchClientData = async () => {
@@ -51,9 +53,18 @@ export default function ClientPage({
     setDiscordGrowthData(data)
   }
 
+  const fetchDiscordEngagementData = async () => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API}/v1/client/${slug}/discord_engagement`,
+    )
+    const data = await response.json()
+    setDiscordEngagementData(data)
+  }
+
   useEffect(() => {
     fetchClientData()
     fetchDiscordGrowthData()
+    fetchDiscordEngagementData()
   }, [slug])
 
   useEffect(() => {
@@ -73,48 +84,32 @@ export default function ClientPage({
         return date >= startDate
       })
 
-      setFilteredData(newFilteredData)
+      setFilteredGrowthData(newFilteredData)
     }
   }, [discordGrowthData, timeRange])
 
-  const handleFileUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const file = event.target.files?.[0]
-    if (!file) return
-
-    const formData = new FormData()
-    formData.append('file', file)
-
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/v1/csv/upload_csv/?client_slug=${slug}`,
-        {
-          method: 'POST',
-          body: formData,
-        },
-      )
-
-      if (!response.ok) {
-        throw new Error('Upload failed')
+  // TODO: Combine with the above
+  useEffect(() => {
+    if (discordEngagementData) {
+      const referenceDate = new Date()
+      let daysToSubtract = 90
+      if (timeRange === '30 days') {
+        daysToSubtract = 30
+      } else if (timeRange === '7 days') {
+        daysToSubtract = 7
       }
 
-      toast({
-        title: 'Success',
-        description: 'CSV file uploaded successfully',
+      const startDate = new Date(referenceDate)
+      startDate.setDate(startDate.getDate() - daysToSubtract)
+
+      const newFilteredData = discordEngagementData.filter((item) => {
+        const date = new Date(item.date)
+        return date >= startDate
       })
 
-      // Refresh the data
-      await fetchDiscordGrowthData()
-    } catch (error) {
-      console.error('Upload failed:', error)
-      toast({
-        title: 'Error',
-        description: 'Failed to upload CSV file',
-        variant: 'destructive',
-      })
+      setFilteredEngagementData(newFilteredData)
     }
-  }
+  }, [discordEngagementData, timeRange])
 
   return (
     <div>
@@ -142,14 +137,24 @@ export default function ClientPage({
               </SelectContent>
             </Select>
           </div>
-          <div className="grid grid-cols-1 gap-4 w-full my-4">
+          <div className="grid grid-cols-2 gap-4 w-full my-4">
             <div className="w-full bg-white flex items-center justify-center rounded-xl">
               <ChartDiscordGrowth
                 slug={slug}
-                chartData={filteredData}
+                chartData={filteredGrowthData}
                 chartTitle="Discord Growth"
-                chartDescription={`Total visitors in the last ${timeRange}.`}
+                chartDescription={`Total new members in the last ${timeRange}.`}
                 fetchDiscordGrowthData={fetchDiscordGrowthData}
+                toast={toast}
+              />
+            </div>
+            <div className="w-full bg-white flex items-center justify-center rounded-xl">
+              <ChartDiscordEngagement
+                slug={slug}
+                chartData={filteredEngagementData}
+                chartTitle="Discord Engagement"
+                chartDescription={`Total engagement in the last ${timeRange}.`}
+                fetchDiscordEngagementData={fetchDiscordEngagementData}
                 toast={toast}
               />
             </div>

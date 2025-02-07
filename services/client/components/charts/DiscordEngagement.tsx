@@ -1,6 +1,6 @@
 import { Upload } from 'lucide-react'
 
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import {
   Card,
   CardContent,
@@ -18,39 +18,27 @@ import {
 } from '@/components/core-ui/chart'
 
 const chartConfig = {
-  vanity_joins: {
-    label: 'Vanity URL',
-    color: 'var(--chart-1)',
-  },
-  invites: {
-    label: 'Invite',
+  visitors: {
+    label: 'Visitors',
     color: 'var(--chart-2)',
   },
-  discovery_joins: {
-    label: 'Discovery',
-    color: 'var(--chart-3)',
-  },
-  integration_joins: {
-    label: 'Integration',
-    color: 'var(--chart-4)',
-  },
-  other_joins: {
-    label: 'Others',
-    color: 'var(--chart-5)',
+  pct_communicated: {
+    label: 'Percentage Communicated',
+    color: 'var(--chart-1)',
   },
 } satisfies ChartConfig
 
-export default function ChartDiscordGrowth(props) {
+export default function ChartDiscordEngagement(props) {
   const {
     slug,
     chartData,
     chartTitle,
     chartDescription,
-    fetchDiscordGrowthData,
+    fetchDiscordEngagementData,
     toast,
   } = props
 
-  const handleGrowthFileUpload = async (
+  const handleEngagementFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0]
@@ -61,7 +49,7 @@ export default function ChartDiscordGrowth(props) {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/v1/discord/upload/growth_csv/?client_slug=${slug}`,
+        `${process.env.NEXT_PUBLIC_API}/v1/discord/upload/engagement_csv/?client_slug=${slug}&csv_type=engagement`,
         {
           method: 'POST',
           body: formData,
@@ -79,7 +67,7 @@ export default function ChartDiscordGrowth(props) {
       })
 
       // Refresh the data
-      await fetchDiscordGrowthData()
+      await fetchDiscordEngagementData()
     } catch (error) {
       console.error('Upload failed:', error)
       toast({
@@ -102,12 +90,12 @@ export default function ChartDiscordGrowth(props) {
             <input
               type="file"
               accept=".csv"
-              onChange={handleGrowthFileUpload}
+              onChange={handleEngagementFileUpload}
               className="hidden"
-              id="growth-csv-upload"
+              id="engagement-csv-upload"
             />
             <label
-              htmlFor="growth-csv-upload"
+              htmlFor="engagement-csv-upload"
               className="text-primary cursor-pointer"
             >
               <Upload />
@@ -123,7 +111,7 @@ export default function ChartDiscordGrowth(props) {
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient
-                    id="vanityGradient"
+                    id="visitorsGradient"
                     x1="0"
                     y1="0"
                     x2="0"
@@ -131,17 +119,17 @@ export default function ChartDiscordGrowth(props) {
                   >
                     <stop
                       offset="0%"
-                      stopColor={chartConfig.vanity_joins.color}
+                      stopColor={chartConfig.visitors.color}
                       stopOpacity={0.8}
                     />
                     <stop
                       offset="70%"
-                      stopColor={chartConfig.vanity_joins.color}
+                      stopColor={chartConfig.visitors.color}
                       stopOpacity={0.3}
                     />
                   </linearGradient>
                   <linearGradient
-                    id="discoveryGradient"
+                    id="pct_communicatedGradient"
                     x1="0"
                     y1="0"
                     x2="0"
@@ -149,66 +137,12 @@ export default function ChartDiscordGrowth(props) {
                   >
                     <stop
                       offset="0%"
-                      stopColor={chartConfig.discovery_joins.color}
+                      stopColor={chartConfig.pct_communicated.color}
                       stopOpacity={0.8}
                     />
                     <stop
                       offset="70%"
-                      stopColor={chartConfig.discovery_joins.color}
-                      stopOpacity={0.3}
-                    />
-                  </linearGradient>
-                  <linearGradient
-                    id="invitesGradient"
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="1"
-                  >
-                    <stop
-                      offset="0%"
-                      stopColor={chartConfig.invites.color}
-                      stopOpacity={0.8}
-                    />
-                    <stop
-                      offset="70%"
-                      stopColor={chartConfig.invites.color}
-                      stopOpacity={0.3}
-                    />
-                  </linearGradient>
-                  <linearGradient
-                    id="integrationGradient"
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="1"
-                  >
-                    <stop
-                      offset="0%"
-                      stopColor={chartConfig.integration_joins.color}
-                      stopOpacity={0.8}
-                    />
-                    <stop
-                      offset="70%"
-                      stopColor={chartConfig.integration_joins.color}
-                      stopOpacity={0.3}
-                    />
-                  </linearGradient>
-                  <linearGradient
-                    id="otherGradient"
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="1"
-                  >
-                    <stop
-                      offset="0%"
-                      stopColor={chartConfig.other_joins.color}
-                      stopOpacity={0.8}
-                    />
-                    <stop
-                      offset="70%"
-                      stopColor={chartConfig.other_joins.color}
+                      stopColor={chartConfig.pct_communicated.color}
                       stopOpacity={0.3}
                     />
                   </linearGradient>
@@ -228,6 +162,8 @@ export default function ChartDiscordGrowth(props) {
                     })
                   }}
                 />
+                <YAxis yAxisId="left" />
+                <YAxis yAxisId="right" orientation="right" domain={[0, 100]} />
                 <ChartTooltip
                   cursor={false}
                   content={
@@ -243,38 +179,19 @@ export default function ChartDiscordGrowth(props) {
                   }
                 />
                 <Area
-                  dataKey="vanity_joins"
+                  yAxisId="left"
+                  dataKey="visitors"
                   type="natural"
-                  fill="url(#vanityGradient)"
-                  stroke={chartConfig.vanity_joins.color}
+                  fill="url(#visitorsGradient)"
+                  stroke={chartConfig.visitors.color}
                   stackId="a"
                 />
                 <Area
-                  dataKey="discovery_joins"
+                  yAxisId="right"
+                  dataKey="pct_communicated"
                   type="natural"
-                  fill="url(#discoveryGradient)"
-                  stroke={chartConfig.discovery_joins.color}
-                  stackId="a"
-                />
-                <Area
-                  dataKey="invites"
-                  type="natural"
-                  fill="url(#invitesGradient)"
-                  stroke={chartConfig.invites.color}
-                  stackId="a"
-                />
-                <Area
-                  dataKey="integration_joins"
-                  type="natural"
-                  fill="url(#integrationGradient)"
-                  stroke={chartConfig.integration_joins.color}
-                  stackId="a"
-                />
-                <Area
-                  dataKey="other_joins"
-                  type="natural"
-                  fill="url(#otherGradient)"
-                  stroke={chartConfig.other_joins.color}
+                  fill="url(#pct_communicatedGradient)"
+                  stroke={chartConfig.pct_communicated.color}
                   stackId="a"
                 />
                 <ChartLegend content={<ChartLegendContent />} />
