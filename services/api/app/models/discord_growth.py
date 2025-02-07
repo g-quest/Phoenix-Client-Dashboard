@@ -1,6 +1,6 @@
 from typing import Optional
 from app.models.base import Base
-from sqlmodel import Field
+from sqlmodel import Field, UniqueConstraint
 from datetime import datetime
 
 # Example CSV data associated with a client
@@ -17,3 +17,5 @@ class DiscordGrowth(Base, table=True):
     total_joins: int
     created_at: datetime = Field(default_factory=datetime.utcnow) 
     updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+    __table_args__ = (UniqueConstraint('client_slug', 'date', name='uix_client_date'),)

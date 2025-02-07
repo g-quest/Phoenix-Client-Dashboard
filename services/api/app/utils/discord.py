@@ -6,9 +6,9 @@ import pandas as pd
 import tempfile
 
 
-class DiscordGrowth:
+class Discord:
 
-    async def upload_csv(self, db: Session, client_slug: str, file: UploadFile = File(...)):
+    async def upload_growth_csv(self, db: Session, client_slug: str, file: UploadFile = File(...)):
 
         # Validate file type
         if not file.filename.endswith(".csv"):
@@ -33,21 +33,29 @@ class DiscordGrowth:
                     detail=f"Invalid CSV format. Missing required columns: {', '.join(missing_columns)}"
                 )
 
-            # Insert data into the database
+            # Get existing dates for the client_slug
+            existing_dates = set(
+                date for (date,) in db.query(DiscordGrowth.date)
+                .filter(DiscordGrowth.client_slug == client_slug)
+                .all()
+            )
+
+            # Insert new data into the database
             for _, row in df.iterrows():
-                discord_growth_data = DiscordGrowth(
-                    client_slug=client_slug,
-                    date=row["day_pt"],
-                    discovery_joins=row["discovery_joins"],
-                    invites=row["invites"],
-                    vanity_joins=row["vanity_joins"],
-                    hubs_joins=row["hubs_joins"],
-                    bot_joins=row["bot_joins"],
-                    integration_joins=row["integration_joins"],
-                    other_joins=row["other_joins"],
-                    total_joins=row["total_joins"],
-                )
-                db.add(discord_growth_data)
+                if row["day_pt"] not in existing_dates:
+                    discord_growth_data = DiscordGrowth(
+                        client_slug=client_slug,
+                        date=row["day_pt"],
+                        discovery_joins=row["discovery_joins"],
+                        invites=row["invites"],
+                        vanity_joins=row["vanity_joins"],
+                        hubs_joins=row["hubs_joins"],
+                        bot_joins=row["bot_joins"],
+                        integration_joins=row["integration_joins"],
+                        other_joins=row["other_joins"],
+                        total_joins=row["total_joins"],
+                    )
+                    db.add(discord_growth_data)
             db.commit()
 
         except Exception as e:
@@ -61,4 +69,4 @@ class DiscordGrowth:
         return {"detail": "CSV uploaded and processed successfully!"}
 
 
-discord_growth = DiscordGrowth()
+discord = Discord()

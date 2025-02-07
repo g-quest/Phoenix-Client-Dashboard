@@ -61,7 +61,7 @@ export default function ChartDiscordGrowth(props) {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/v1/discord/upload_growth_csv/?client_slug=${slug}`,
+        `${process.env.NEXT_PUBLIC_API}/v1/discord/upload/growth_csv/?client_slug=${slug}`,
         {
           method: 'POST',
           body: formData,
