@@ -1,6 +1,6 @@
 import { Upload } from 'lucide-react'
 
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import {
   Card,
   CardContent,
@@ -237,6 +237,7 @@ export default function ChartDiscordGrowth(props) {
                     })
                   }}
                 />
+                <YAxis />
                 <ChartTooltip
                   cursor={false}
                   content={
@@ -252,10 +253,17 @@ export default function ChartDiscordGrowth(props) {
                   }
                 />
                 <Area
-                  dataKey="vanity_joins"
+                  dataKey="other_joins"
                   type="natural"
-                  fill="url(#vanityGradient)"
-                  stroke={chartConfig.vanity_joins.color}
+                  fill="url(#otherGradient)"
+                  stroke={chartConfig.other_joins.color}
+                  stackId="a"
+                />
+                <Area
+                  dataKey="integration_joins"
+                  type="natural"
+                  fill="url(#integrationGradient)"
+                  stroke={chartConfig.integration_joins.color}
                   stackId="a"
                 />
                 <Area
@@ -273,17 +281,10 @@ export default function ChartDiscordGrowth(props) {
                   stackId="a"
                 />
                 <Area
-                  dataKey="integration_joins"
+                  dataKey="vanity_joins"
                   type="natural"
-                  fill="url(#integrationGradient)"
-                  stroke={chartConfig.integration_joins.color}
-                  stackId="a"
-                />
-                <Area
-                  dataKey="other_joins"
-                  type="natural"
-                  fill="url(#otherGradient)"
-                  stroke={chartConfig.other_joins.color}
+                  fill="url(#vanityGradient)"
+                  stroke={chartConfig.vanity_joins.color}
                   stackId="a"
                 />
                 <ChartLegend content={<ChartLegendContent />} />

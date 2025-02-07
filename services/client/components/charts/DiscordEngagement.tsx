@@ -21,11 +21,11 @@ import { Separator } from '@/components/core-ui/separator'
 const chartConfig = {
   visitors: {
     label: 'Visitors',
-    color: 'var(--chart-2)',
+    color: 'var(--chart-1)',
   },
   pct_communicated: {
     label: 'Percentage Communicated',
-    color: 'var(--chart-1)',
+    color: 'var(--chart-2)',
   },
 } satisfies ChartConfig
 
@@ -201,6 +201,7 @@ export default function ChartDiscordEngagement(props) {
                   fill="url(#pct_communicatedGradient)"
                   stroke={chartConfig.pct_communicated.color}
                   stackId="a"
+                  fillOpacity={1}
                 />
                 <ChartLegend content={<ChartLegendContent />} />
               </AreaChart>

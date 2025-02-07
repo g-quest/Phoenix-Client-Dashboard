@@ -206,6 +206,7 @@ export default function ChartDiscordMessages(props) {
                   fill="url(#messages_per_communicatorGradient)"
                   stroke={chartConfig.messages_per_communicator.color}
                   stackId="a"
+                  fillOpacity={1}
                 />
                 <ChartLegend content={<ChartLegendContent />} />
               </AreaChart>
