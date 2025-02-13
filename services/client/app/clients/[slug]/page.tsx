@@ -33,12 +33,14 @@ export default function ClientPage({
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
+
+  const [timeRange, setTimeRange] = useState('7 days')
   const [activeTab, setActiveTab] = useState('discord')
 
   const [client, setClient] = useState(null)
   const [discordGrowthData, setDiscordGrowthData] = useState(null)
   const [discordEngagementData, setDiscordEngagementData] = useState(null)
-  const [timeRange, setTimeRange] = useState('7 days')
+  const [telegramData, setTelegramData] = useState(null)
 
   const fetchClientData = async () => {
     try {
@@ -72,10 +74,19 @@ export default function ClientPage({
     setDiscordEngagementData(data)
   }
 
+  const fetchTelegramData = async () => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API}/v1/client/${slug}/telegram`,
+    )
+    const data = await response.json()
+    setTelegramData(data)
+  }
+
   useEffect(() => {
     fetchClientData()
     fetchDiscordGrowthData()
     fetchDiscordEngagementData()
+    fetchTelegramData()
   }, [slug])
 
   useEffect(() => {
@@ -139,7 +150,13 @@ export default function ClientPage({
                 />
               </TabsContent>
               <TabsContent value="telegram">
-                <SectionTelegram />
+                <SectionTelegram
+                  slug={slug}
+                  timeRange={timeRange}
+                  toast={toast}
+                  telegramData={telegramData}
+                  fetchTelegramData={fetchTelegramData}
+                />
               </TabsContent>
             </Tabs>
           </div>
