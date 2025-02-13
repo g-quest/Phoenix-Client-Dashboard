@@ -4,6 +4,7 @@ import ClientHeading from '@/components/ui/ClientHeading'
 import PageContainer from '@/components/ui/PageContainer'
 import { use, useEffect, useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
+import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 
 import {
   Select,
@@ -29,6 +30,10 @@ export default function ClientPage({
 }) {
   const { slug } = use(params) as { slug: string }
   const { toast } = useToast()
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const router = useRouter()
+  const [activeTab, setActiveTab] = useState('discord')
 
   const [client, setClient] = useState(null)
   const [discordGrowthData, setDiscordGrowthData] = useState(null)
@@ -73,13 +78,29 @@ export default function ClientPage({
     fetchDiscordEngagementData()
   }, [slug])
 
+  useEffect(() => {
+    const queryTab = searchParams.get('tab')
+    if (queryTab) {
+      setActiveTab(queryTab)
+    }
+  }, [searchParams])
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value)
+    router.push(`${pathname}?tab=${value}`)
+  }
+
   return (
     <div>
       <PageContainer>
         <ClientHeading client={client} />
         <div className="w-full pb-4 max-w-[1400px] mx-auto">
           <div className="flex justify-between mb-8">
-            <Tabs defaultValue="discord" className="w-full">
+            <Tabs
+              value={activeTab}
+              onValueChange={handleTabChange}
+              className="w-full"
+            >
               <div className="flex justify-between mb-8">
                 <TabsList>
                   <TabsTrigger value="discord">Discord</TabsTrigger>
