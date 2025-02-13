@@ -12,9 +12,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/core-ui/select'
-import ChartDiscordGrowth from '@/components/charts/DiscordGrowth'
-import ChartDiscordEngagement from '@/components/charts/DiscordEngagement'
-import ChartDiscordMessages from '@/components/charts/DiscordMessages'
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/core-ui/tabs'
+
+import SectionDiscord from '@/components/sections/Discord'
+import SectionTelegram from '@/components/sections/Telegram'
 
 export default function ClientPage({
   params,
@@ -23,18 +29,11 @@ export default function ClientPage({
 }) {
   const { slug } = use(params) as { slug: string }
   const { toast } = useToast()
-  // console.log(slug)
+
   const [client, setClient] = useState(null)
   const [discordGrowthData, setDiscordGrowthData] = useState(null)
   const [discordEngagementData, setDiscordEngagementData] = useState(null)
-  const [filteredGrowthData, setFilteredGrowthData] = useState([])
-  const [filteredEngagementData, setFilteredEngagementData] = useState([])
   const [timeRange, setTimeRange] = useState('7 days')
-  const [totalNewUsers, setTotalNewUsers] = useState(0)
-  const [totalVisitors, setTotalVisitors] = useState(0)
-  const [totalMessages, setTotalMessages] = useState(0)
-  const [averageMessagesPerCommunicator, setAverageMessagesPerCommunicator] =
-    useState('0.00')
 
   const fetchClientData = async () => {
     try {
@@ -74,136 +73,54 @@ export default function ClientPage({
     fetchDiscordEngagementData()
   }, [slug])
 
-  useEffect(() => {
-    if (discordGrowthData) {
-      const referenceDate = new Date()
-      let daysToSubtract = 90
-      if (timeRange === '30 days') {
-        daysToSubtract = 30
-      } else if (timeRange === '7 days') {
-        daysToSubtract = 7
-      }
-
-      const startDate = new Date(referenceDate)
-      startDate.setDate(startDate.getDate() - daysToSubtract)
-
-      const newFilteredData = discordGrowthData.filter((item) => {
-        const date = new Date(item.date)
-        return date >= startDate
-      })
-
-      const totalUsers = newFilteredData
-        .reduce((sum, item) => sum + item.total_joins, 0)
-        .toLocaleString()
-
-      setFilteredGrowthData(newFilteredData)
-      setTotalNewUsers(totalUsers)
-    }
-  }, [discordGrowthData, timeRange])
-
-  useEffect(() => {
-    if (discordEngagementData) {
-      const referenceDate = new Date()
-      let daysToSubtract = 90
-      if (timeRange === '30 days') {
-        daysToSubtract = 30
-      } else if (timeRange === '7 days') {
-        daysToSubtract = 7
-      }
-
-      const startDate = new Date(referenceDate)
-      startDate.setDate(startDate.getDate() - daysToSubtract)
-
-      const newFilteredData = discordEngagementData.filter((item) => {
-        const date = new Date(item.date)
-        return date >= startDate
-      })
-
-      const totalVisitorsCount = newFilteredData
-        .reduce((sum, item) => sum + item.visitors, 0)
-        .toLocaleString()
-      const totalMessagesCount = newFilteredData
-        .reduce((sum, item) => sum + (item.messages || 0), 0)
-        .toLocaleString()
-      const totalMessagesPerCommunicator = newFilteredData
-        .reduce((sum, item) => sum + (item.messages_per_communicator || 0), 0)
-        .toLocaleString()
-      const averageMessages =
-        newFilteredData.length > 0
-          ? (totalMessagesPerCommunicator / newFilteredData.length).toFixed(2)
-          : '0.00'
-
-      setFilteredEngagementData(newFilteredData)
-      setTotalVisitors(totalVisitorsCount)
-      setTotalMessages(totalMessagesCount)
-      setAverageMessagesPerCommunicator(averageMessages)
-    }
-  }, [discordEngagementData, timeRange])
-
   return (
     <div>
       <PageContainer>
         <ClientHeading client={client} />
         <div className="w-full pb-4 max-w-[1400px] mx-auto">
-          <div className="flex justify-end mb-8">
-            <Select value={timeRange} onValueChange={setTimeRange}>
-              <SelectTrigger
-                className="w-[160px] rounded-lg"
-                aria-label="Select a value"
-              >
-                <SelectValue placeholder="Last 3 months" />
-              </SelectTrigger>
-              <SelectContent className="rounded-xl">
-                <SelectItem value="3 months" className="rounded-lg">
-                  Last 3 months
-                </SelectItem>
-                <SelectItem value="30 days" className="rounded-lg">
-                  Last 30 days
-                </SelectItem>
-                <SelectItem value="7 days" className="rounded-lg">
-                  Last 7 days
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <h3 className="pl-2">Discord Community</h3>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full my-4">
-              <div className="w-full bg-white flex items-center justify-center rounded-xl">
-                <ChartDiscordGrowth
+          <div className="flex justify-between mb-8">
+            <Tabs defaultValue="discord" className="w-full">
+              <div className="flex justify-between mb-8">
+                <TabsList>
+                  <TabsTrigger value="discord">Discord</TabsTrigger>
+                  <TabsTrigger value="telegram">Telegram</TabsTrigger>
+                </TabsList>
+                <Select value={timeRange} onValueChange={setTimeRange}>
+                  <SelectTrigger
+                    className="w-[160px] rounded-lg"
+                    aria-label="Select a value"
+                  >
+                    <SelectValue placeholder="Last 3 months" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl">
+                    <SelectItem value="3 months" className="rounded-lg">
+                      Last 3 months
+                    </SelectItem>
+                    <SelectItem value="30 days" className="rounded-lg">
+                      Last 30 days
+                    </SelectItem>
+                    <SelectItem value="7 days" className="rounded-lg">
+                      Last 7 days
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <TabsContent value="discord">
+                <SectionDiscord
                   slug={slug}
-                  chartData={filteredGrowthData}
-                  chartTitle="Growth"
-                  chartDescription={`New member activity in the last ${timeRange}.`}
+                  timeRange={timeRange}
+                  toast={toast}
+                  discordGrowthData={discordGrowthData}
+                  discordEngagementData={discordEngagementData}
                   fetchDiscordGrowthData={fetchDiscordGrowthData}
-                  toast={toast}
-                  totalNewUsers={totalNewUsers}
-                />
-              </div>
-              <div className="w-full bg-white flex items-center justify-center rounded-xl">
-                <ChartDiscordEngagement
-                  slug={slug}
-                  chartData={filteredEngagementData}
-                  chartTitle="Engagement"
-                  chartDescription={`Engagement in the last ${timeRange}.`}
                   fetchDiscordEngagementData={fetchDiscordEngagementData}
-                  toast={toast}
-                  totalVisitors={totalVisitors}
                 />
-              </div>
-            </div>
-            <div className="w-full bg-white flex items-center justify-center rounded-xl">
-              <ChartDiscordMessages
-                slug={slug}
-                chartData={filteredEngagementData}
-                chartTitle="Messages"
-                chartDescription={`Messages in the last ${timeRange}.`}
-                fetchDiscordMessagesData={fetchDiscordEngagementData}
-                toast={toast}
-                totalMessages={totalMessages}
-                averageMessagesPerCommunicator={averageMessagesPerCommunicator}
-              />
-            </div>
+              </TabsContent>
+              <TabsContent value="telegram">
+                <SectionTelegram />
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </PageContainer>
