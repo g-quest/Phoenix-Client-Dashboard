@@ -7,7 +7,8 @@ from app.core.db import engine, init_db
 # Import routers
 from app.routes import (
     client,
-    discord
+    discord,
+    telegram
 ) 
 
 # Initialize database
@@ -36,6 +37,7 @@ api_router = APIRouter()
 # Include routers (uncomment when adding routes)
 api_router.include_router(client.router, prefix="/client", tags=["Client"])
 api_router.include_router(discord.router, prefix="/discord", tags=["Discord"])
+api_router.include_router(telegram.router, prefix="/telegram", tags=["Telegram"])
 
 # Register API Router with prefix
 app.include_router(api_router, prefix="/v1")

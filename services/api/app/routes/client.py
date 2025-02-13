@@ -33,3 +33,8 @@ def get_discord_engagement_data(slug: str, db: Session = Depends(db.get_db)):
     data = crud.discord_engagement.get_all_by_client_slug(db, slug)
     return data
 
+@router.get("/{slug}/telegram")
+def get_telegram_data(slug: str, db: Session = Depends(db.get_db)):
+    data = crud.telegram.get_all_by_client_slug(db, slug)
+    return data
+
