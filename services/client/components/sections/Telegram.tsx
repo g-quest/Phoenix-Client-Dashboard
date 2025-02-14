@@ -45,10 +45,12 @@ export default function SectionTelegram(props) {
       const startDate = new Date(referenceDate)
       startDate.setDate(startDate.getDate() - daysToSubtract)
 
-      const filteredData = telegramData.filter((item) => {
-        const date = new Date(item.date)
-        return date >= startDate
-      })
+      const filteredData = telegramData
+        .filter((item) => {
+          const date = new Date(item.date)
+          return date >= startDate
+        })
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
       setFilteredTelegramData(filteredData)
 
       const totalNewUsers = filteredData

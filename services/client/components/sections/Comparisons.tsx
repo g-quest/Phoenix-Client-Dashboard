@@ -41,10 +41,12 @@ export default function SectionComparisons(props) {
       const startDate = new Date(referenceDate)
       startDate.setDate(startDate.getDate() - daysToSubtract)
 
-      const filteredData = data.filter((item) => {
-        const date = new Date(item.date)
-        return date >= startDate
-      })
+      const filteredData = data
+        .filter((item) => {
+          const date = new Date(item.date)
+          return date >= startDate
+        })
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
       if (type === 'telegram') {
         setFilteredTelegramData(filteredData)
       } else if (type === 'discordGrowth') {

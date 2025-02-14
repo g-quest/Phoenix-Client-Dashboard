@@ -36,10 +36,13 @@ export default function SectionDiscord(props) {
       const startDate = new Date(referenceDate)
       startDate.setDate(startDate.getDate() - daysToSubtract)
 
-      const filteredData = data.filter((item) => {
-        const date = new Date(item.date)
-        return date >= startDate
-      })
+      const filteredData = data
+        .filter((item) => {
+          const date = new Date(item.date)
+          return date >= startDate
+        })
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+
       setFilteredData(filteredData)
 
       if (type === 'growth') {
@@ -58,20 +61,16 @@ export default function SectionDiscord(props) {
           .toLocaleString()
         setTotalMessages(totalMessagesCount)
 
-        if (setAverageMessagesPerCommunicator) {
-          const totalMessagesPerCommunicator = filteredData
-            .reduce(
-              (sum, item) => sum + (item.messages_per_communicator || 0),
-              0,
-            )
-            .toLocaleString()
+        const totalMessagesPerCommunicator = filteredData.reduce(
+          (sum, item) => sum + (item.messages_per_communicator || 0),
+          0,
+        )
 
-          const averageMessages =
-            filteredData.length > 0
-              ? (totalMessagesPerCommunicator / filteredData.length).toFixed(2)
-              : '0.00'
-          setAverageMessagesPerCommunicator(averageMessages)
-        }
+        const averageMessages =
+          filteredData.length > 0
+            ? (totalMessagesPerCommunicator / filteredData.length).toFixed(2)
+            : '0.00'
+        setAverageMessagesPerCommunicator(averageMessages)
       }
     }
 
