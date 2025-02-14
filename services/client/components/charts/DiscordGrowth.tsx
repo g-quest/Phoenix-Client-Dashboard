@@ -16,6 +16,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/core-ui/chart'
+import { format } from 'date-fns'
 
 const chartConfig = {
   vanity_joins: {
@@ -222,10 +223,10 @@ export default function ChartDiscordGrowth(props) {
                   minTickGap={32}
                   tickFormatter={(value) => {
                     const date = new Date(value)
-                    return date.toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                    })
+                    const utcDate = new Date(
+                      date.getTime() + date.getTimezoneOffset() * 60000,
+                    )
+                    return format(utcDate, 'MMM d')
                   }}
                 />
                 <YAxis />
@@ -234,29 +235,16 @@ export default function ChartDiscordGrowth(props) {
                   content={
                     <ChartTooltipContent
                       labelFormatter={(value) => {
-                        return new Date(value).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                        })
+                        const date = new Date(value)
+                        const utcDate = new Date(
+                          date.getTime() + date.getTimezoneOffset() * 60000,
+                        )
+                        return format(utcDate, 'MMM d')
                       }}
                       indicator="dot"
                     />
                   }
                 />
-                {/* <Area
-                  dataKey="other_joins"
-                  type="natural"
-                  fill="url(#otherGradient)"
-                  stroke={chartConfig.other_joins.color}
-                  stackId="a"
-                />
-                <Area
-                  dataKey="integration_joins"
-                  type="natural"
-                  fill="url(#integrationGradient)"
-                  stroke={chartConfig.integration_joins.color}
-                  stackId="a"
-                /> */}
                 <Area
                   dataKey="discovery_joins"
                   type="natural"

@@ -14,25 +14,35 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/core-ui/chart'
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 
 const chartConfig = {
-  new_users: {
-    label: 'New Users',
+  discord_new_joins: {
+    label: 'Discord',
     color: 'var(--chart-1)',
   },
-  active_users: {
-    label: 'Active Users',
+  telegram_new_users: {
+    label: 'Telegram',
     color: 'var(--chart-2)',
-  },
-  left_users: {
-    label: 'Left Users',
-    color: 'var(--chart-3)',
   },
 } satisfies ChartConfig
 
-export default function ChartTelegramUsers(props) {
-  const { chartData, chartTitle, chartDescription } = props
+export default function ChartCrossUsers(props) {
+  const { telegramData, discordGrowthData, chartTitle, chartDescription } =
+    props
+
+  // Combine data
+  const combinedData = telegramData.map((telegramEntry) => {
+    const discordEntry = discordGrowthData.find(
+      (discordEntry) => discordEntry.date === telegramEntry.date,
+    )
+
+    return {
+      date: telegramEntry.date,
+      new_users: telegramEntry.new_users,
+      total_joins: discordEntry ? discordEntry.total_joins : 0,
+    }
+  })
 
   return (
     <div className="w-full">
@@ -44,15 +54,18 @@ export default function ChartTelegramUsers(props) {
           </div>
         </CardHeader>
         <CardContent className="p-4 sm:px-6 sm:pt-2">
-          {chartData && chartData.length > 0 ? (
+          {telegramData &&
+          telegramData.length > 0 &&
+          discordGrowthData &&
+          discordGrowthData.length > 0 ? (
             <ChartContainer
               config={chartConfig}
               className="aspect-auto h-[250px] w-full"
             >
-              <AreaChart data={chartData}>
+              <AreaChart data={combinedData}>
                 <defs>
                   <linearGradient
-                    id="new_usersGradient"
+                    id="telegram_new_usersGradient"
                     x1="0"
                     y1="0"
                     x2="0"
@@ -60,17 +73,17 @@ export default function ChartTelegramUsers(props) {
                   >
                     <stop
                       offset="0%"
-                      stopColor={chartConfig.new_users.color}
+                      stopColor={chartConfig.telegram_new_users.color}
                       stopOpacity={0.8}
                     />
                     <stop
                       offset="70%"
-                      stopColor={chartConfig.new_users.color}
+                      stopColor={chartConfig.telegram_new_users.color}
                       stopOpacity={0.3}
                     />
                   </linearGradient>
                   <linearGradient
-                    id="active_usersGradient"
+                    id="discord_new_joinsGradient"
                     x1="0"
                     y1="0"
                     x2="0"
@@ -78,30 +91,12 @@ export default function ChartTelegramUsers(props) {
                   >
                     <stop
                       offset="0%"
-                      stopColor={chartConfig.active_users.color}
+                      stopColor={chartConfig.discord_new_joins.color}
                       stopOpacity={0.8}
                     />
                     <stop
                       offset="70%"
-                      stopColor={chartConfig.active_users.color}
-                      stopOpacity={0.3}
-                    />
-                  </linearGradient>
-                  <linearGradient
-                    id="left_usersGradient"
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="1"
-                  >
-                    <stop
-                      offset="0%"
-                      stopColor={chartConfig.left_users.color}
-                      stopOpacity={0.8}
-                    />
-                    <stop
-                      offset="70%"
-                      stopColor={chartConfig.left_users.color}
+                      stopColor={chartConfig.discord_new_joins.color}
                       stopOpacity={0.3}
                     />
                   </linearGradient>
@@ -139,28 +134,24 @@ export default function ChartTelegramUsers(props) {
                 />
                 <Area
                   yAxisId="left_id"
+                  dataKey="total_joins"
+                  type="natural"
+                  fill="url(#discord_new_joinsGradient)"
+                  stroke={chartConfig.discord_new_joins.color}
+                  name={chartConfig.discord_new_joins.label}
+                  fillOpacity={1}
+                />
+                <Area
+                  yAxisId="left_id"
                   dataKey="new_users"
                   type="natural"
-                  fill="url(#new_usersGradient)"
-                  stroke={chartConfig.new_users.color}
-                />
-                <Area
-                  yAxisId="left_id"
-                  dataKey="active_users"
-                  type="natural"
-                  fill="url(#active_usersGradient)"
-                  stroke={chartConfig.active_users.color}
+                  fill="url(#telegram_new_usersGradient)"
+                  stroke={chartConfig.telegram_new_users.color}
+                  name={chartConfig.telegram_new_users.label}
                   fillOpacity={1}
                 />
-                <Area
-                  yAxisId="left_id"
-                  dataKey="left_users"
-                  type="natural"
-                  fill="url(#left_usersGradient)"
-                  stroke={chartConfig.left_users.color}
-                  fillOpacity={1}
-                />
-                <ChartLegend content={<ChartLegendContent />} />
+
+                <ChartLegend />
               </AreaChart>
             </ChartContainer>
           ) : (

@@ -22,7 +22,7 @@ import {
 
 import SectionDiscord from '@/components/sections/Discord'
 import SectionTelegram from '@/components/sections/Telegram'
-
+import SectionComparisons from '@/components/sections/Comparisons'
 export default function ClientPage({
   params,
 }: {
@@ -116,6 +116,7 @@ export default function ClientPage({
                 <TabsList>
                   <TabsTrigger value="discord">Discord</TabsTrigger>
                   <TabsTrigger value="telegram">Telegram</TabsTrigger>
+                  <TabsTrigger value="comparisons">Comparisons</TabsTrigger>
                 </TabsList>
                 <Select value={timeRange} onValueChange={setTimeRange}>
                   <SelectTrigger
@@ -157,6 +158,15 @@ export default function ClientPage({
                   toast={toast}
                   telegramData={telegramData}
                   fetchTelegramData={fetchTelegramData}
+                />
+              </TabsContent>
+              <TabsContent value="comparisons">
+                <SectionComparisons
+                  slug={slug}
+                  timeRange={timeRange}
+                  telegramData={telegramData}
+                  discordGrowthData={discordGrowthData}
+                  discordEngagementData={discordEngagementData}
                 />
               </TabsContent>
             </Tabs>

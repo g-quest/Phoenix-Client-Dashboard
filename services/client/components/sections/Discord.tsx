@@ -116,7 +116,6 @@ export default function SectionDiscord(props) {
             chartDescription={`New member activity in the last ${timeRange}.`}
             fetchDiscordGrowthData={fetchDiscordGrowthData}
             toast={toast}
-            totalNewUsers={totalNewUsers}
           />
         </div>
         <div className="w-full bg-white flex items-center justify-center rounded-xl">
@@ -127,7 +126,6 @@ export default function SectionDiscord(props) {
             chartDescription={`Engagement in the last ${timeRange}.`}
             fetchDiscordEngagementData={fetchDiscordEngagementData}
             toast={toast}
-            totalVisitors={totalVisitors}
           />
         </div>
       </div>
@@ -139,8 +137,6 @@ export default function SectionDiscord(props) {
           chartDescription={`Messages in the last ${timeRange}.`}
           fetchDiscordMessagesData={fetchDiscordEngagementData}
           toast={toast}
-          totalMessages={totalMessages}
-          averageMessagesPerCommunicator={averageMessagesPerCommunicator}
         />
       </div>
     </div>

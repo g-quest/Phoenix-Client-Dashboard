@@ -145,10 +145,7 @@ export default function SectionTelegram(props) {
           slug={slug}
           chartData={filteredTelegramData}
           chartTitle="Telegram Users"
-          chartDescription="Telegram users over time"
-          totalNewUsers={totalNewUsers}
-          totalActiveUsers={totalActiveUsers}
-          totalLeftUsers={totalLeftUsers}
+          chartDescription={`Users in the last ${timeRange}.`}
         />
       </div>
       <div className="w-full bg-white flex items-center justify-center rounded-xl">
@@ -156,8 +153,7 @@ export default function SectionTelegram(props) {
           slug={slug}
           chartData={filteredTelegramData}
           chartTitle="Messages"
-          chartDescription="Telegram messages over time"
-          totalMessages={totalMessages}
+          chartDescription={`Messages in the last ${timeRange}.`}
         />
       </div>
     </div>

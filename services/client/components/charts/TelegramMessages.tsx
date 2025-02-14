@@ -14,6 +14,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/core-ui/chart'
+import { format } from 'date-fns'
 
 const chartConfig = {
   messages: {
@@ -70,10 +71,10 @@ export default function ChartTelegramMessages(props) {
                   minTickGap={32}
                   tickFormatter={(value) => {
                     const date = new Date(value)
-                    return date.toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                    })
+                    const utcDate = new Date(
+                      date.getTime() + date.getTimezoneOffset() * 60000,
+                    )
+                    return format(utcDate, 'MMM d')
                   }}
                 />
                 <YAxis yAxisId="left_id" />
@@ -82,10 +83,11 @@ export default function ChartTelegramMessages(props) {
                   content={
                     <ChartTooltipContent
                       labelFormatter={(value) => {
-                        return new Date(value).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                        })
+                        const date = new Date(value)
+                        const utcDate = new Date(
+                          date.getTime() + date.getTimezoneOffset() * 60000,
+                        )
+                        return format(utcDate, 'MMM d')
                       }}
                       indicator="dot"
                     />
