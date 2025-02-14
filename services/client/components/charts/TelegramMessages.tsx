@@ -1,5 +1,3 @@
-import { Upload } from 'lucide-react'
-
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import {
   Card,
@@ -16,7 +14,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/core-ui/chart'
-import { Separator } from '@/components/core-ui/separator'
 
 const chartConfig = {
   messages: {
@@ -26,7 +23,7 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export default function ChartTelegramMessages(props) {
-  const { chartData, chartTitle, chartDescription, totalMessages } = props
+  const { chartData, chartTitle, chartDescription } = props
 
   return (
     <div className="w-full">
@@ -37,14 +34,7 @@ export default function ChartTelegramMessages(props) {
             <CardDescription>{chartDescription}</CardDescription>
           </div>
         </CardHeader>
-        <Separator className="my-2" />
         <CardContent className="p-4 sm:px-6 sm:pt-2">
-          <div className="mb-4">
-            <p>
-              <span className="font-bold">Total Messages:</span> {totalMessages}
-            </p>
-          </div>
-
           {chartData && chartData.length > 0 ? (
             <ChartContainer
               config={chartConfig}

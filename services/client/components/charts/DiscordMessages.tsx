@@ -16,7 +16,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/core-ui/chart'
-import { Separator } from '@/components/core-ui/separator'
 
 const chartConfig = {
   messages: {
@@ -37,8 +36,6 @@ export default function ChartDiscordMessages(props) {
     chartDescription,
     fetchDiscordMessagesData,
     toast,
-    totalMessages,
-    averageMessagesPerCommunicator,
   } = props
 
   const handleMessagesFileUpload = async (
@@ -105,17 +102,7 @@ export default function ChartDiscordMessages(props) {
             </label>
           </div>
         </CardHeader>
-        <Separator className="my-2" />
         <CardContent className="p-4 sm:px-6 sm:pt-2">
-          <div className="mb-4">
-            <p>
-              <span className="font-bold">Total Messages:</span> {totalMessages}
-            </p>
-            <p>
-              <span className="font-bold">Average Messages Per User:</span>{' '}
-              {averageMessagesPerCommunicator}
-            </p>
-          </div>
           {chartData && chartData.length > 0 ? (
             <ChartContainer
               config={chartConfig}

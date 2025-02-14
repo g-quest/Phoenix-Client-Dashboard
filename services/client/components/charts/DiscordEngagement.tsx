@@ -16,7 +16,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/core-ui/chart'
-import { Separator } from '@/components/core-ui/separator'
 
 const chartConfig = {
   visitors: {
@@ -37,7 +36,6 @@ export default function ChartDiscordEngagement(props) {
     chartDescription,
     fetchDiscordEngagementData,
     toast,
-    totalVisitors,
   } = props
 
   const handleEngagementFileUpload = async (
@@ -104,13 +102,7 @@ export default function ChartDiscordEngagement(props) {
             </label>
           </div>
         </CardHeader>
-        <Separator className="my-2" />
         <CardContent className="p-4 sm:px-6 sm:pt-2">
-          <div className="mb-4">
-            <p>
-              <span className="font-bold">Total Visitors:</span> {totalVisitors}
-            </p>
-          </div>
           {chartData && chartData.length > 0 ? (
             <ChartContainer
               config={chartConfig}

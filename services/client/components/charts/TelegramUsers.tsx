@@ -1,5 +1,3 @@
-import { Upload } from 'lucide-react'
-
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import {
   Card,
@@ -16,7 +14,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/core-ui/chart'
-import { Separator } from '@/components/core-ui/separator'
 
 const chartConfig = {
   new_users: {
@@ -34,14 +31,7 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export default function ChartTelegramUsers(props) {
-  const {
-    chartData,
-    chartTitle,
-    chartDescription,
-    totalNewUsers,
-    totalActiveUsers,
-    totalLeftUsers,
-  } = props
+  const { chartData, chartTitle, chartDescription } = props
 
   return (
     <div className="w-full">
@@ -52,22 +42,7 @@ export default function ChartTelegramUsers(props) {
             <CardDescription>{chartDescription}</CardDescription>
           </div>
         </CardHeader>
-        <Separator className="my-2" />
         <CardContent className="p-4 sm:px-6 sm:pt-2">
-          <div className="mb-4">
-            <p>
-              <span className="font-bold">Total New Users:</span>{' '}
-              {totalNewUsers}
-            </p>
-            <p>
-              <span className="font-bold">Total Active Users:</span>{' '}
-              {totalActiveUsers}
-            </p>
-            <p>
-              <span className="font-bold">Total Left Users:</span>{' '}
-              {totalLeftUsers}
-            </p>
-          </div>
           {chartData && chartData.length > 0 ? (
             <ChartContainer
               config={chartConfig}

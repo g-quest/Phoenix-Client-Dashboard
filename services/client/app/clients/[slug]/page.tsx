@@ -34,7 +34,7 @@ export default function ClientPage({
   const pathname = usePathname()
   const router = useRouter()
 
-  const [timeRange, setTimeRange] = useState('7 days')
+  const [timeRange, setTimeRange] = useState('30 days')
   const [activeTab, setActiveTab] = useState('discord')
 
   const [client, setClient] = useState(null)

@@ -13,16 +13,9 @@ export default function SectionTelegram(props) {
   const [totalMessages, setTotalMessages] = useState(0)
 
   useEffect(() => {
-    const filterAndCalculateData = (
-      data,
-      setFilteredData,
-      setTotalNewUsers,
-      setTotalActiveUsers,
-      setTotalLeftUsers,
-      setTotalMessages,
-    ) => {
-      if (!data) {
-        setFilteredData([])
+    const filterAndCalculateData = () => {
+      if (!telegramData) {
+        setFilteredTelegramData([])
         setTotalNewUsers(0)
         setTotalActiveUsers(0)
         setTotalLeftUsers(0)
@@ -41,51 +34,55 @@ export default function SectionTelegram(props) {
       const startDate = new Date(referenceDate)
       startDate.setDate(startDate.getDate() - daysToSubtract)
 
-      const newFilteredData = data.filter((item) => {
+      const filteredData = telegramData.filter((item) => {
         const date = new Date(item.date)
         return date >= startDate
       })
-      setFilteredData(newFilteredData)
+      setFilteredTelegramData(filteredData)
 
-      const totalNewUsers = newFilteredData
+      const totalNewUsers = filteredData
         .reduce((sum, item) => sum + (item.new_users || 0), 0)
         .toLocaleString()
       setTotalNewUsers(totalNewUsers)
 
-      const totalActiveUsers = newFilteredData
+      const totalActiveUsers = filteredData
         .reduce((sum, item) => sum + (item.active_users || 0), 0)
         .toLocaleString()
       setTotalActiveUsers(totalActiveUsers)
 
-      const totalLeftUsers = newFilteredData
+      const totalLeftUsers = filteredData
         .reduce((sum, item) => sum + (item.left_users || 0), 0)
         .toLocaleString()
       setTotalLeftUsers(totalLeftUsers)
 
-      const totalMessages = newFilteredData
+      const totalMessages = filteredData
         .reduce((sum, item) => sum + (item.messages || 0), 0)
         .toLocaleString()
       setTotalMessages(totalMessages)
     }
 
-    filterAndCalculateData(
-      telegramData,
-      setFilteredTelegramData,
-      setTotalNewUsers,
-      setTotalActiveUsers,
-      setTotalLeftUsers,
-      setTotalMessages,
-    )
+    filterAndCalculateData()
   }, [telegramData, timeRange])
 
   return (
     <div>
-      {/*
-      <p>Total New Users: {totalNewUsers}</p>
-      <p>Total Active Users: {totalActiveUsers}</p>
-      <p>Total Left Users: {totalLeftUsers}</p>
-      <p>Total Messages: {totalMessages}</p> */}
-      <h3 className="pl-2">Telegram</h3>
+      <div className="bg-white rounded-xl p-4">
+        <h3 className="mb-2">Telegram</h3>
+        <div className="grid gap-2 grid-cols-2 md:max-w-[300px]">
+          <div className="font-bold flex flex-col gap-2">
+            <p>New Users:</p>
+            <p>Active Users:</p>
+            <p>Left Users:</p>
+            <p>Messages:</p>
+          </div>
+          <div className="italic flex flex-col gap-2">
+            <p>{totalNewUsers}</p>
+            <p>{totalActiveUsers}</p>
+            <p>{totalLeftUsers}</p>
+            <p>{totalMessages}</p>
+          </div>
+        </div>
+      </div>
       <div className="w-full bg-white flex items-center justify-center rounded-xl my-4">
         <ChartTelegramUsers
           slug={slug}
