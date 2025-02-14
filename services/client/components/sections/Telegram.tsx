@@ -113,7 +113,7 @@ export default function SectionTelegram(props) {
       <div className="bg-white rounded-xl p-4">
         <div className="flex justify-between">
           <h3 className="mb-2">Telegram</h3>
-          <Button
+          {/* <Button
             className="w-24"
             onClick={refreshTelegramData}
             disabled={isLoading}
@@ -125,7 +125,7 @@ export default function SectionTelegram(props) {
                 <CloudDownload className="w-4 h-4" /> Update
               </>
             )}
-          </Button>
+          </Button> */}
         </div>
         <div className="grid gap-2 grid-cols-2 md:max-w-[300px]">
           <div className="font-bold flex flex-col gap-2">
