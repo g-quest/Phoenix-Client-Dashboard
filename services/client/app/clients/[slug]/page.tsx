@@ -152,6 +152,7 @@ export default function ClientPage({
               <TabsContent value="telegram">
                 <SectionTelegram
                   slug={slug}
+                  clientName={client?.name}
                   timeRange={timeRange}
                   toast={toast}
                   telegramData={telegramData}

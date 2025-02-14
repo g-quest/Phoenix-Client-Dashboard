@@ -1,16 +1,27 @@
 import { useEffect, useState } from 'react'
 
+import { CloudDownload, Loader2 } from 'lucide-react'
+
 import ChartTelegramUsers from '@/components/charts/TelegramUsers'
 import ChartTelegramMessages from '@/components/charts/TelegramMessages'
+import { Button } from '../core-ui/button'
 
 export default function SectionTelegram(props) {
-  const { slug, timeRange, toast, telegramData, fetchTelegramData } = props
+  const {
+    slug,
+    clientName,
+    timeRange,
+    toast,
+    telegramData,
+    fetchTelegramData,
+  } = props
 
   const [filteredTelegramData, setFilteredTelegramData] = useState([])
   const [totalNewUsers, setTotalNewUsers] = useState(0)
   const [totalActiveUsers, setTotalActiveUsers] = useState(0)
   const [totalLeftUsers, setTotalLeftUsers] = useState(0)
   const [totalMessages, setTotalMessages] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const filterAndCalculateData = () => {
@@ -64,10 +75,56 @@ export default function SectionTelegram(props) {
     filterAndCalculateData()
   }, [telegramData, timeRange])
 
+  const refreshTelegramData = async () => {
+    setIsLoading(true)
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API}/v1/telegram/add/?client_slug=${slug}&days_back=90`,
+        {
+          method: 'POST',
+        },
+      )
+      if (!response.ok) {
+        throw new Error('Upload failed')
+      }
+
+      fetchTelegramData()
+      toast({
+        title: 'Telegram Data Loaded',
+        description: `Latest Telegram data for ${clientName} has been loaded.`,
+        variant: 'success',
+      })
+    } catch (error) {
+      console.error('Error fetching telegram data:', error)
+      toast({
+        title: 'Error',
+        description: `Error fetching Telegram data for ${clientName}`,
+        variant: 'destructive',
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <div>
       <div className="bg-white rounded-xl p-4">
-        <h3 className="mb-2">Telegram</h3>
+        <div className="flex justify-between">
+          <h3 className="mb-2">Telegram</h3>
+          <Button
+            className="w-24"
+            onClick={refreshTelegramData}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <>
+                <CloudDownload className="w-4 h-4" /> Update
+              </>
+            )}
+          </Button>
+        </div>
         <div className="grid gap-2 grid-cols-2 md:max-w-[300px]">
           <div className="font-bold flex flex-col gap-2">
             <p>New Users:</p>
