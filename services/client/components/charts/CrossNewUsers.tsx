@@ -10,11 +10,10 @@ import {
   ChartConfig,
   ChartContainer,
   ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/core-ui/chart'
-import { format, parseISO } from 'date-fns'
+import { format } from 'date-fns'
 
 const chartConfig = {
   discord_new_joins: {
@@ -27,7 +26,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export default function ChartCrossUsers(props) {
+export default function ChartCrossNewUsers(props) {
   const { telegramData, discordGrowthData, chartTitle, chartDescription } =
     props
 

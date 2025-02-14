@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react'
 
-import { CloudDownload, Loader2 } from 'lucide-react'
-
-import ChartTelegramUsers from '@/components/charts/TelegramUsers'
-import ChartTelegramMessages from '@/components/charts/TelegramMessages'
-import { Button } from '../core-ui/button'
-import ChartCrossUsers from '../charts/CrossUsers'
+import ChartCrossNewUsers from '../charts/CrossNewUsers'
+import ChartCrossMessages from '../charts/CrossMessages'
 
 export default function SectionComparisons(props) {
   const {
@@ -69,12 +65,21 @@ export default function SectionComparisons(props) {
         <h3>Cross Channel Comparisons</h3>
       </div>
       <div className="w-full bg-white flex items-center justify-center rounded-xl my-4">
-        <ChartCrossUsers
+        <ChartCrossNewUsers
           slug={slug}
           telegramData={filteredTelegramData}
           discordGrowthData={filteredDiscordGrowthData}
           chartTitle="Discord vs Telegram New Users"
           chartDescription={`New users in the last ${timeRange}.`}
+        />
+      </div>
+      <div className="w-full bg-white flex items-center justify-center rounded-xl my-4">
+        <ChartCrossMessages
+          slug={slug}
+          telegramData={filteredTelegramData}
+          discordEngagementData={filteredDiscordEngagementData}
+          chartTitle="Discord vs Telegram Messages"
+          chartDescription={`Messages in the last ${timeRange}.`}
         />
       </div>
     </div>
