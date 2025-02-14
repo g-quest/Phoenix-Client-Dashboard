@@ -5,11 +5,13 @@ RUN mkdir -p /usr/src/app && chown -R node:node /usr/src/app
 USER node
 WORKDIR /usr/src/app
 COPY --chown=node:node package*.json ./
-RUN npm ci
+RUN npm install
 
 # Build Stage: Build the Next.js App
 FROM node:20-alpine AS build
 LABEL project="phoenix" stage="build"
+ARG API
+ARG NEXT_PUBLIC_API
 USER node
 WORKDIR /usr/src/app
 COPY --from=base /usr/src/app/node_modules ./node_modules
