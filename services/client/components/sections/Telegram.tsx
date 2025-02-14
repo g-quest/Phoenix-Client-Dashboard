@@ -146,7 +146,7 @@ export default function SectionTelegram(props) {
         <ChartTelegramUsers
           slug={slug}
           chartData={filteredTelegramData}
-          chartTitle="Telegram Users"
+          chartTitle="Users"
           chartDescription={`Users in the last ${timeRange}.`}
         />
       </div>
